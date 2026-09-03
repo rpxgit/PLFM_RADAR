@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: software
+confidence: mixed
+canonical: true
+---
+
 # Host Software & GUI Architecture
 
 > **Related notes:** [[02_System_Architecture]] · [[04_Firmware_FPGA]] · [[04b_USB_Interface]]
@@ -117,3 +125,10 @@ The V7 dashboard utilizes a tabbed interface (`v7/dashboard.py`):
 | -- | ------- | ---------------------- | -------- |
 | GUI-01 | MCU Command Interface | Is the MCU controlled exclusively via the FPGA (acting as a master proxy), or does it have a separate USB CDC port (`USBHandler.cpp`) that the GUI is ignoring? | High |
 | GUI-02 | Calibration Routines | Does the GUI perform PA Bias or Beamforming calibration, or is that hardcoded in the MCU firmware? | Medium |
+
+
+## Related Notes
+
+- [[02_System_Architecture]]
+- [[04b_USB_Interface]]
+- [[07a_USB_Packet_Protocol]]

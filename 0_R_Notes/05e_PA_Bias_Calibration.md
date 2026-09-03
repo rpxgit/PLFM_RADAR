@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # PA Bias and Calibration
 
 > **Related notes:** [[05_Firmware_MCU]]
@@ -39,3 +47,9 @@ While the exact numeric algorithm requires deeper extraction, the structural loo
 1.  The STM32 sets a target $V_g$ via the DAC5578 (`DAC5578_WriteAndUpdateChannelValue`).
 2.  It reads the resulting $I_{dq}$ via the ADS7830.
 3.  It iterates until the target current is achieved for each channel independently.
+
+
+## Related Notes
+
+- [[05_Firmware_MCU]]
+- [[03d_Power_Amplifier_Board]]

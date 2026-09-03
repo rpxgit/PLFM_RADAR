@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # ADF4382 Frequency Synthesizer Configuration
 
 > **Related notes:** [[05_Firmware_MCU]] · [[05b_Clock_Generator_AD9523]]
@@ -32,3 +40,9 @@ From the AD9523 configuration:
 2.  **Runtime Modulation:** The actual FMCW chirp generation is typically handled autonomously by the ADF4382's internal ramp generator, triggered by an external hardware pulse. The firmware's job is to load the ramp profiles (start frequency, slope, duration) into the registers during the idle state.
 
 *Note: The exact chirp parameters (bandwidth, duration) are likely passed from the host PC over USB and parsed by the firmware to update the ADF4382 registers.*
+
+
+## Related Notes
+
+- [[05_Firmware_MCU]]
+- [[03c_Frequency_Synthesizer_Board]]

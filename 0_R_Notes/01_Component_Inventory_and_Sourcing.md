@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: system
+confidence: mixed
+canonical: true
+---
+
 # Component Inventory & Preliminary Sourcing BOM
 
 > **Related notes:** [[00_Executive_Summary]] · [[02_System_Architecture]] · [[03_Hardware]] · [[08_Unknowns_and_Hypotheses]]  
@@ -511,3 +519,9 @@ VCO frequency: 3.6 GHz (PLL2: VCXO 100 MHz × N=36)
 ---
 
 *This document links back to [[00_Executive_Summary]] and forward to [[03_Hardware]] for detailed board-level analysis.*
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[08_Component_Inventory]]

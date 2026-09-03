@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: protocol
+confidence: mixed
+canonical: true
+---
+
 # System Communication Protocols
 
 > **Related notes:** [[02_System_Architecture]] · [[07a_USB_Packet_Protocol]] · [[07b_SPI_Bus_Map]] · [[07c_I2C_Bus_Map]] · [[07d_STM32_FPGA_GPIO_Interface]]
@@ -139,3 +147,12 @@ To replace the MCU firmware, a new implementation MUST:
 
 ---
 *Created in read-only forensic mode. Derived directly from repository implementation evidence.*
+
+
+## Related Notes
+
+- [[02_System_Architecture]]
+- [[07a_USB_Packet_Protocol]]
+- [[07b_SPI_Bus_Map]]
+- [[07c_I2C_Bus_Map]]
+- [[07d_STM32_FPGA_GPIO_Interface]]

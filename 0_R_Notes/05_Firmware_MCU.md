@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # MCU Firmware Master Note
 
 > **Related notes:** [[02_System_Architecture]] · [[03_Hardware]]
@@ -97,3 +105,14 @@ Reconstructed from `main.cpp`:
 | MCU-01 | GPIO Pin Mapping | `main.cpp` lacks `.ioc` | Trace `MX_GPIO_Init` or extract GPIO definitions from compiled binary if source is missing. | Critical |
 | MCU-02 | Host Protocol | `USBHandler.cpp` | Reverse engineer command structures passed over USB to control the radar. | High |
 | MCU-03 | Build Environment | Missing `.ioc`/Makefile | Identify the compiler/IDE originally used to create a rebuildable project. | Medium |
+
+
+## Related Notes
+
+- [[02_System_Architecture]]
+- [[05a_Power_Sequencing]]
+- [[05b_Clock_Generator_AD9523]]
+- [[05c_Frequency_Synthesizer_ADF4382]]
+- [[05d_Beamformer_ADAR1000]]
+- [[05e_PA_Bias_Calibration]]
+- [[07d_STM32_FPGA_GPIO_Interface]]

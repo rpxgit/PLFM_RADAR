@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: system
+confidence: mixed
+canonical: true
+---
+
 # System Architecture
 
 > **Related notes:** [[00_Executive_Summary]] · [[01_Repository_Map]] · [[01_Component_Inventory_and_Sourcing]]  
@@ -297,3 +305,13 @@ The tight coupling between the MCU firmware's I2C calibration math and the hardw
 *   **Required evidence:** `3_Power Management/Power Management V6.xlsx`.
 *   **Expected output:** A strict state machine diagram of the power-up sequence and timing constraints.
 *   **Dependencies:** Capability to parse binary `.xlsx` files.
+
+
+## Related Notes
+
+- [[00_Executive_Summary]]
+- [[03_Hardware]]
+- [[04_Firmware_FPGA]]
+- [[05_Firmware_MCU]]
+- [[06_Software_GUI]]
+- [[07_Communication_Protocols]]

@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # ADAR1000 Beamformer Configuration
 
 > **Related notes:** [[05_Firmware_MCU]]
@@ -33,3 +41,10 @@ The STM32 continuously monitors the ADAR1000 chips for health:
 1.  **Temperature:** It reads the internal temperature sensor of each chip (`main.cpp:588`).
 2.  **Errors:** If communication drops or temperature exceeds a threshold, the firmware generates specific error codes: `ERROR_ADAR1000_COMM` or `ERROR_ADAR1000_TEMP`.
 3.  **Emergency Stop:** While a temperature fault might trigger a system shutdown to prevent damage, unit tests (`test_gap3_overtemp_emergency_stop.c`) verify that simple communication errors do *not* automatically trigger a hard emergency stop, allowing the system to attempt recovery.
+
+
+## Related Notes
+
+- [[05_Firmware_MCU]]
+- [[03a_Main_Board]]
+- [[03e_Antenna_Array]]

@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: system
+confidence: mixed
+canonical: true
+---
+
 # Repository Architecture Map & Forensic Index
 
 > **Related notes:** [[00_Executive_Summary]] · [[01_Component_Inventory_and_Sourcing]]  
@@ -209,3 +217,9 @@ graph TD
 3.  **MCU Firmware Analysis:** Extract the exact boot sequence, power thresholds, and calibration logic from `main.cpp`.
 4.  **FPGA Architecture Mapping:** Reconstruct the Vivado project structure based on instantiated modules and IP cores in the Verilog source.
 5.  **Protocol Mapping:** Document the binary/text protocol between the Python GUI and MCU.
+
+
+## Related Notes
+
+- [[00_Executive_Summary]]
+- [[02_System_Architecture]]

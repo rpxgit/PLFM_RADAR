@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: fpga
+confidence: mixed
+canonical: true
+---
+
 # FPGA Constraints and Target Analysis
 
 > **Related notes:** [[04_Firmware_FPGA]]
@@ -51,3 +59,9 @@ The repository reveals several hardware-level issues that were resolved via DRC 
 Any hardware replication attempt **must** strictly adhere to this exact pin mapping and voltage assignment, as the PCB cannot easily absorb pin swaps across voltage domains.
 
 The constraints completely validate the finding that the production AERIS-10 board is heavily I/O constrained and relies on the FT2232H (USB 2.0) rather than the FT601 (USB 3.0) due to lack of available pins.
+
+
+## Related Notes
+
+- [[04_Firmware_FPGA]]
+- [[03a_Main_Board]]

@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: protocol
+confidence: mixed
+canonical: true
+---
+
 # USB Packet Protocol
 
 > **Related notes:** [[07_Communication_Protocols]] · [[06_Software_GUI]]
@@ -93,3 +101,10 @@ Returned only in response to a `0xFF` STATUS_REQUEST command.
 | ID | Unknown | Impact | Next Steps |
 | -- | ------- | ------ | ---------- |
 | USB-01 | MCU Native USB | Does the MCU have an independent USB CDC connection (`USBHandler.cpp`) used for debugging or calibration, independent of the primary FTDI data plane? | Analyze `main.cpp` for `MX_USB_DEVICE_Init()` and `CDC_Receive_FS()` handlers. |
+
+
+## Related Notes
+
+- [[07_Communication_Protocols]]
+- [[04b_USB_Interface]]
+- [[06_Software_GUI]]

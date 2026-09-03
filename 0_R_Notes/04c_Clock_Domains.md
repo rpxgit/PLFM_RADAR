@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: fpga
+confidence: mixed
+canonical: true
+---
+
 # FPGA Clock Domains
 
 > **Related notes:** [[04_Firmware_FPGA]]
@@ -38,3 +46,9 @@ The MCU uses asynchronous GPIO toggles (e.g., `stm32_new_chirp`). The FPGA uses 
 ## 3. Replication Impact
 
 The FPGA completely relies on the external AD9523 Frequency Synthesizer to provide the 100 MHz and 120 MHz clocks. The FPGA does not appear to use an internal PLL/MMCM to generate the system clock from a raw crystal, meaning the MCU *must* successfully configure the AD9523 over SPI before the FPGA can boot its DSP pipeline.
+
+
+## Related Notes
+
+- [[04_Firmware_FPGA]]
+- [[05b_Clock_Generator_AD9523]]

@@ -183,6 +183,11 @@
   },
   "active": "18348d6e67f97977",
   "lastOpenFiles": [
+    "PROJECT_STATUS.md",
+    "99_Documentation_Audit.md",
+    "10_Reverse_Engineering_Plan.md",
+    "09_Unknowns_and_Hypotheses.md",
+    "08_Component_Inventory.md",
     "07_Communication_Protocols.md",
     "07a_USB_Packet_Protocol.md",
     "07d_STM32_FPGA_GPIO_Interface.md",
@@ -203,11 +208,6 @@
     "03_Hardware.md",
     "03e_Antenna_Array.md",
     "03d_Power_Amplifier_Board.md",
-    "03c_Frequency_Synthesizer_Board.md",
-    "03b_Power_Board.md",
-    "03a_Main_Board.md",
-    "02_System_Architecture.md",
-    "01_Repository_Map.md",
-    "00_Executive_Summary.md"
+    "03c_Frequency_Synthesizer_Board.md"
   ]
 }

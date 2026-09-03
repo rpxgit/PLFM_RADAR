@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # AD9523 Clock Generator Configuration
 
 > **Related notes:** [[05_Firmware_MCU]] · [[04c_Clock_Domains]]
@@ -35,3 +43,10 @@ According to the firmware source (`main.cpp:1448`), the AD9523 is configured to 
 1.  **Driver Initialization:** Handled by `configure_ad9523()` which wraps the `ad9523_setup()` function from the `no_os` library.
 2.  **Failure Handling:** If the AD9523 fails to initialize or lock its PLL to the OCXO reference, the STM32 enters an infinite halt loop (`main.cpp:1468`). The system cannot operate without a locked clock tree.
 3.  **Phase Alignment:** Channels are explicitly grouped into phase-aligned pairs (e.g., TX and RX synthesizers receive identical, phase-matched 300 MHz and 60 MHz references). This is critical for coherent FMCW radar operation.
+
+
+## Related Notes
+
+- [[05_Firmware_MCU]]
+- [[03c_Frequency_Synthesizer_Board]]
+- [[04c_Clock_Domains]]

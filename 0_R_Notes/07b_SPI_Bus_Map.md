@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: protocol
+confidence: mixed
+canonical: true
+---
+
 # SPI Bus Map
 
 > **Related notes:** [[07_Communication_Protocols]] · [[03_Hardware]] · [[05_Firmware_MCU]]
@@ -60,3 +68,11 @@ The system utilizes two primary SPI buses originating from the STM32 microcontro
 | ID | Unknown | Impact | Next Steps |
 | -- | ------- | ------ | ---------- |
 | SPI-01 | FPGA SPI Configuration | The FPGA might be configured via an SPI interface (or parallel), but it is not evident on SPI1 or SPI4 in the current MCU mapping. Is the FPGA bitstream loaded via SPI flash or MCU GPIO? | Map MCU pins to FPGA config pins (`PROGRAM_B`, `DONE`, `INIT_B`). |
+
+
+## Related Notes
+
+- [[07_Communication_Protocols]]
+- [[05b_Clock_Generator_AD9523]]
+- [[05c_Frequency_Synthesizer_ADF4382]]
+- [[05d_Beamformer_ADAR1000]]

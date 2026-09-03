@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Frequency Synthesizer Board
 
 > **Related notes:** [[03_Hardware]] · [[13_RF_Signal_Chain]]
@@ -57,3 +65,10 @@ Reference Clock (On-board or External)
 | -- | ------- | -------------- | ------------------ | ---------------------- |
 | FSB-01 | Reference Clock | Does it use a TCXO, OCXO, or external reference? | `.sch` | Parse schematic. |
 | FSB-02 | Physical Routing | Are the clocks routed via cables (SMA/u.FL) or board-to-board headers? | `.sch`, `.dwg` | Parse schematic/mechanicals. |
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[05b_Clock_Generator_AD9523]]
+- [[05c_Frequency_Synthesizer_ADF4382]]

@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Main Board
 
 > **Related notes:** [[03_Hardware]] · [[01_Component_Inventory_and_Sourcing]]
@@ -67,3 +75,10 @@
 | -- | ------- | -------------- | ------------------ | ---------------------- |
 | MB-01 | FPGA Configuration | How does the FPGA load its bitstream (Flash SPI vs MCU)? | Schematics | Parse `.sch` for flash ICs. |
 | MB-02 | USB Hubbing | Does the board have an onboard USB hub, or two separate USB ports? | `README.md` | Parse `.sch` for USB connectors/hubs. |
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[04_Firmware_FPGA]]
+- [[05_Firmware_MCU]]

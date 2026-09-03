@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: protocol
+confidence: mixed
+canonical: true
+---
+
 # STM32 ↔ FPGA GPIO Interface
 
 > **Related notes:** [[07_Communication_Protocols]] · [[04_Firmware_FPGA]] · [[05_Firmware_MCU]]
@@ -49,3 +57,10 @@ While not strictly a communication protocol, the MCU controls the FPGA's power r
 | -- | ------- | ------ | ---------- |
 | GPIO-01 | DIG6 & DIG7 Function | Two digital pins exist with unknown semantics. They may be used by the MCU to trigger a radar frame, or by the FPGA to signal frame completion (Interrupt). | Analyze `main.cpp` for GPIO EXTI interrupt handlers attached to `PD14` and `PD15`. |
 | GPIO-02 | Clock Synchronization | Is there a clock signal shared directly between the MCU and FPGA? | Verify if `AD9523` provides independent clocks to both, eliminating the need for a direct MCU-FPGA clock line. |
+
+
+## Related Notes
+
+- [[07_Communication_Protocols]]
+- [[04_Firmware_FPGA]]
+- [[05_Firmware_MCU]]

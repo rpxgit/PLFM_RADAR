@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Hardware Architecture Master Document
 
 > **Related notes:** [[02_System_Architecture]] · [[01_Component_Inventory_and_Sourcing]] · [[09_Unknowns_and_Hypotheses]] · [[12_Power_Architecture]] · [[13_RF_Signal_Chain]]
@@ -159,3 +167,14 @@ The tight coupling between the Main Board's MCU calibration firmware and the phy
 *   **Why it matters:** It is impossible to manufacture or purchase components for the PCBs without the passive part specifications.
 *   **Required evidence:** `4_7_Production Files/Gerber_*/*.xlsx`
 *   **Expected output:** A flat, human-readable list of all reference designators and exact MPNs.
+
+
+## Related Notes
+
+- [[02_System_Architecture]]
+- [[03a_Main_Board]]
+- [[03b_Power_Board]]
+- [[03c_Frequency_Synthesizer_Board]]
+- [[03d_Power_Amplifier_Board]]
+- [[03e_Antenna_Array]]
+- [[08_Component_Inventory]]

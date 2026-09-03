@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Antenna Array
 
 > **Related notes:** [[03_Hardware]] · [[13_RF_Signal_Chain]]
@@ -54,3 +62,9 @@ The AERIS-10 product relies on two completely distinct antenna configurations de
 | ANT-01 | Patch Stack-up | What is the exact PCB substrate for the Patch Antenna? | `4_4_Board Stack-up` | Verify if stack-up documentation exists for the Patch board. |
 | ANT-02 | Waveguide Integration | How do the 16 PA boards mechanically and electrically mate to the waveguide feeds? | `DFSWA.dwg` | Parse DWG CAD files. |
 | ANT-03 | Stepper Motor / Slip-ring | What are the exact part numbers for the mechanical actuation system? | `README.md`, `SlipRing.dwg` | Parse DWG CAD files. |
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[05d_Beamformer_ADAR1000]]

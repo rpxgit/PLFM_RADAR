@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Power Amplifier Board
 
 > **Related notes:** [[03_Hardware]] · [[13_RF_Signal_Chain]]
@@ -54,3 +62,9 @@
 | -- | ------- | -------------- | ------------------ | ---------------------- |
 | PAB-01 | Bias Routing | How are the individual Vg and Idq sense lines routed from the Main Board to the 16 PA boards? | `.sch` | Parse Main and PA board schematics. |
 | PAB-02 | Physical Integration | How do 16 boards physically mate with the Main Board and the Waveguide? | `.dwg` | Parse mechanical drawings. |
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[05e_PA_Bias_Calibration]]

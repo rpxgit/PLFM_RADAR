@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: protocol
+confidence: mixed
+canonical: true
+---
+
 # I²C Bus Map
 
 > **Related notes:** [[07_Communication_Protocols]] · [[03_Hardware]] · [[05_Firmware_MCU]]
@@ -58,3 +66,9 @@ All STM32 I²C buses are initialized with `I2C_ADDRESSINGMODE_7BIT` and use a ti
 | ID | Unknown | Impact | Next Steps |
 | -- | ------- | ------ | ---------- |
 | I2C-01 | Full Sensor Address Map | The explicit I²C addresses for the GY-85 IMU and BMP180 are abstracted inside the driver files and not evident in `main.cpp`. | Search `BMP180.cpp` and `GY_85_HAL.c` for hardcoded 7-bit addresses. |
+
+
+## Related Notes
+
+- [[07_Communication_Protocols]]
+- [[05e_PA_Bias_Calibration]]

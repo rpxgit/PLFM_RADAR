@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: fpga
+confidence: mixed
+canonical: true
+---
+
 # FPGA Firmware and Architecture Master Note
 
 > **Related notes:** [[02_System_Architecture]] · [[03_Hardware]]
@@ -133,3 +141,13 @@ The MCU promises to initialize all RF hardware (Synthesizers, PA bias) *before* 
 
 ### Replication Requirements
 To successfully replicate the FPGA layer, the exact DSP numeric representation (16-bit signed, scaling, and CFAR thresholds) must be preserved, otherwise the radar will generate false targets or miss real targets. The physical hardware must match the XC7A50T FTG256 pinout mapped in the constraints.
+
+
+## Related Notes
+
+- [[02_System_Architecture]]
+- [[04a_DSP_Pipeline]]
+- [[04b_USB_Interface]]
+- [[04c_Clock_Domains]]
+- [[04d_FPGA_Constraints_and_Targets]]
+- [[07d_STM32_FPGA_GPIO_Interface]]

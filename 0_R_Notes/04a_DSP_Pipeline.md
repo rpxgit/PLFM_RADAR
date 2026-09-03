@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: fpga
+confidence: mixed
+canonical: true
+---
+
 # FPGA DSP Pipeline
 
 > **Related notes:** [[04_Firmware_FPGA]]
@@ -60,3 +68,9 @@ flowchart TD
 ## 4. Replication Impact
 
 The DSP pipeline uses a strict 16-bit signed numeric representation for all intermediate I/Q data. The AGC module (`rx_gain_control`) is critical because the 16-bit dynamic range can easily be exceeded (overflow/saturation) or underutilized if the 8-bit ADC input is not scaled correctly based on the target return strength. If replicating the DSP in software or on a different FPGA, fixed-point scaling, rounding, and truncation behavior must match exactly to produce the same CFAR thresholding results.
+
+
+## Related Notes
+
+- [[04_Firmware_FPGA]]
+- [[06_Software_GUI]]

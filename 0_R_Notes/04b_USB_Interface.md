@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: fpga
+confidence: mixed
+canonical: true
+---
+
 # FPGA USB Interface
 
 > **Related notes:** [[04_Firmware_FPGA]] · [[06_Software_GUI]]
@@ -48,3 +56,10 @@ The FPGA simply streams raw bytes. It is entirely up to the Python GUI to find t
 
 The FT2232H in Synchronous FIFO mode theoretically peaks at ~40 MB/s. Given that raw ADC data is 400 MSPS (800 MB/s), **the FPGA cannot stream raw radar data over USB 2.0 in real-time**. 
 Therefore, the FPGA's internal DSP pipeline (DDC, Matched Filter, CFAR) is strictly required to decimate the data down to a bandwidth the FT2232H can handle. Raw data taps (`dbg_adc_i/q`) exist in RTL but can likely only be captured via JTAG ILA or drastically slowed down sweeps.
+
+
+## Related Notes
+
+- [[04_Firmware_FPGA]]
+- [[07a_USB_Packet_Protocol]]
+- [[06_Software_GUI]]

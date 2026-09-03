@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: mcu
+confidence: mixed
+canonical: true
+---
+
 # Power Sequencing
 
 > **Related notes:** [[05_Firmware_MCU]]
@@ -42,3 +50,9 @@ The FPGA requires its core, auxiliary, and I/O voltages to come up in a specific
 
 *   **RF and PA Power:** The initialization sequence in `main.cpp` for the RF frontend (ADAR1000, ADF4382, PA Bias) does not explicitly show GPIO power enables in the same block as the Clock and FPGA. They might be enabled implicitly via their respective manager classes or later in the sequence.
 *   **OCXO Warmup:** Before any power sequencing occurs, the MCU waits 180 seconds (3 minutes) for the Oven-Controlled Crystal Oscillator (OCXO) to stabilize, feeding the watchdog timer (`HAL_IWDG_Refresh`) continuously during this period.
+
+
+## Related Notes
+
+- [[05_Firmware_MCU]]
+- [[03b_Power_Board]]

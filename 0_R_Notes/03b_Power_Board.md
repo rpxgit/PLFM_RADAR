@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: hardware
+confidence: mixed
+canonical: true
+---
+
 # Power Board
 
 > **Related notes:** [[03_Hardware]] · [[12_Power_Architecture]]
@@ -56,3 +64,9 @@
 | -- | ------- | -------------- | ------------------ | ---------------------- |
 | PB-01 | Main Input Specs | What is the required voltage and current capability of the external power supply? | `PowerBoard.sch` | Parse schematic. |
 | PB-02 | Power Sequencing Matrix | What is the exact millisecond sequencing required for boot? | `Power Management V6.xlsx` | Extract Excel data. |
+
+
+## Related Notes
+
+- [[03_Hardware]]
+- [[05a_Power_Sequencing]]

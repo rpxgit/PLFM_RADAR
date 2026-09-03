@@ -1,3 +1,11 @@
+---
+type: reverse-engineering-note
+status: active
+domain: system
+confidence: mixed
+canonical: true
+---
+
 # AERIS-10: Executive Summary & Reconnaissance Baseline
 
 > **Document type:** Initial Reconnaissance — Project Baseline  
@@ -6,6 +14,88 @@
 > **Status:** Alpha (active development)  
 > **License:** CERN-OHL-P v2 (hardware) / MIT (software/firmware)  
 > **Author / Maintainer:** Nawfal Motii — ABAC INDUSTRY (Morocco)
+
+---
+
+## Knowledge Base Navigation
+
+```mermaid
+graph TD
+    EXEC["00 Executive Summary"]
+    REPO["01 Repository Map"]
+    ARCH["02 System Architecture"]
+    HW["03 Hardware"]
+    FPGA["04 FPGA"]
+    MCU["05 MCU"]
+    SW["06 Software"]
+    PROTO["07 Communication"]
+    BOM["08 Component Inventory"]
+    UNK["09 Unknowns & Hypotheses"]
+    PLAN["10 Reverse Engineering Plan"]
+
+    EXEC --> REPO
+    EXEC --> ARCH
+    EXEC --> HW
+    EXEC --> FPGA
+    EXEC --> MCU
+    EXEC --> SW
+    EXEC --> PROTO
+    EXEC --> BOM
+    EXEC --> UNK
+    EXEC --> PLAN
+
+    ARCH --> HW
+    ARCH --> FPGA
+    ARCH --> MCU
+    ARCH --> SW
+    ARCH --> PROTO
+
+    HW --> BOM
+    FPGA --> PROTO
+    MCU --> PROTO
+
+    UNK --> PLAN
+    BOM --> PLAN
+```
+
+* **Repository:** [[01_Repository_Map]]
+* **Architecture:** [[02_System_Architecture]]
+* **Hardware:** [[03_Hardware]]
+* **FPGA:** [[04_Firmware_FPGA]]
+* **MCU:** [[05_Firmware_MCU]]
+* **Software:** [[06_Software_GUI]]
+* **Protocols:** [[07_Communication_Protocols]]
+* **BOM:** [[08_Component_Inventory]]
+* **Unknowns:** [[09_Unknowns_and_Hypotheses]]
+* **Reverse Engineering Plan:** [[10_Reverse_Engineering_Plan]]
+* **Testing:** [[11_Simulation_and_Test_Infrastructure]]
+* **Power:** [[12_Power_Architecture]]
+* **RF:** [[13_RF_Signal_Chain]]
+
+## Current State
+The project has successfully completed the digital architecture and protocol reverse-engineering phase. Hardware reproduction is currently blocked by missing binary extractions (BOM passives and CAD files). Software/FPGA/MCU components can be rebuilt, but physical replication requires resolving external dependencies. 
+
+## Highest-Priority Unknowns
+1. **UNK-001:** `BOM_Main_Board.xlsx` extraction (P0).
+2. **UNK-002:** Mechanical `.dwg` extraction (P0).
+3. **UNK-010:** System input DC voltage constraints (P0).
+
+## Current Critical Path
+1. Extract and parse binary artifacts (BOM and CAD).
+2. Fabricate bare PCBs and machine mechanical parts.
+3. Perform staged power & clock hardware bring-up.
+4. Flash firmware and validate digital boundaries.
+
+## Recently Established Facts
+- The host GUI control loop completely bypasses the STM32 for high-speed data acquisition, communicating directly with the FPGA via FT2232H FIFO.
+- The MCU is relegated exclusively to out-of-band management (thermal, bias, slow telemetry).
+- The README positive-rail-only claim is false; negative biasing is required for the GaN PAs as evidenced by the LM2662 presence.
+
+## Planned Next Investigations
+- **RE-001:** Parse `BOM_Main_Board.xlsx` locally.
+- **RE-002:** Parse `*.dwg` files locally.
+- **RE-003:** Review `PowerBoard.sch` to resolve input power specs.
+- **RE-005:** Verify FPGA bitstream builds without proprietary IP.
 
 ---
 
@@ -93,7 +183,7 @@ The system performs full electronic beam steering (±45° azimuth/elevation) via
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Confidence:** **Observed** — architecture directly described in `README.md` lines 41–118, confirmed by RTL port lists in `9_Firmware/9_2_FPGA/radar_system_top.v` and GPIO defines in `9_Firmware/9_1_Microcontroller/9_1_3_C_Cpp_Code/main.h`.
+**Confidence:** **Confirmed** — architecture directly described in `README.md` lines 41–118, confirmed by RTL port lists in `9_Firmware/9_2_FPGA/radar_system_top.v` and GPIO defines in `9_Firmware/9_1_Microcontroller/9_1_3_C_Cpp_Code/main.h`.
 
 ---
 
@@ -177,7 +267,7 @@ PLFM_RADAR/
 | **Power Amplifier Board** (×16) | `4_6_Schematics/PowerAmplifierBoard/RF_PA.sch` | Yes — `Gerber_PA/` | Eagle |
 | **Patch Antenna** | `4_6_Schematics/Antennas/Patch/` | Yes — `Gerber_Patch_Antenna/` | Eagle |
 
-**Board Stack-up:** 10-layer hybrid stack-up documented in `4_4_Board Stack-up/Stack_Hybrid.png`, using **RO4350B** high-frequency laminate (100 µm core for RF layers) — **Observed** in impedance note `4_7_Production Files/PCBWay_Impedance_Note_RO4350B_h0p102mm.pdf`.
+**Board Stack-up:** 10-layer hybrid stack-up documented in `4_4_Board Stack-up/Stack_Hybrid.png`, using **RO4350B** high-frequency laminate (100 µm core for RF layers) — **Confirmed** in impedance note `4_7_Production Files/PCBWay_Impedance_Note_RO4350B_h0p102mm.pdf`.
 
 ### 4.2 Key Components
 
@@ -286,7 +376,7 @@ Additional modules:
 
 #### USB Protocol
 
-**Observed** 11-byte data packet protocol:
+**Confirmed** 11-byte data packet protocol:
 - **TX (FPGA→Host):** `[0xAA] [range_q 2B] [range_i 2B] [dop_re 2B] [dop_im 2B] [det 1B] [0x55]`
 - **Status packet:** `[0xBB] [status 6×32b] [0x55]` (26 bytes)
 - **RX (Host→FPGA):** 4-byte command: `{opcode, addr, value_hi, value_lo}`
@@ -697,3 +787,9 @@ We understand with reasonable confidence:
 ---
 
 *This document is the entry point to the [[01_Repository_Map|AERIS-10 Reverse Engineering Knowledge Base]]. All future notes should be linked from here.*
+
+
+## Related Notes
+
+- [[01_Repository_Map]]
+- [[02_System_Architecture]]
