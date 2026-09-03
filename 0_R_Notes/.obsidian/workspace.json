@@ -11,10 +11,14 @@
             "id": "450808e17a3f90f4",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "01_Component_Inventory_and_Sourcing.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "01_Component_Inventory_and_Sourcing"
             }
           }
         ]
@@ -95,6 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "01_Component_Inventory_and_Sourcing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "01_Component_Inventory_and_Sourcing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "01_Component_Inventory_and_Sourcing.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -183,6 +190,7 @@
   },
   "active": "450808e17a3f90f4",
   "lastOpenFiles": [
+    "01_Component_Inventory_and_Sourcing.md",
     "00_Executive_Summary.md"
   ]
 }
