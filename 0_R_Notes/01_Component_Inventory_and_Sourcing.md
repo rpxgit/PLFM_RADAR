@@ -400,48 +400,113 @@ VCO frequency: 3.6 GHz (PLL2: VCXO 100 MHz × N=36)
 
 ---
 
-## 16. Missing Information
+## 16. Information Gaps & Investigation Backlog
 
-Before a production-quality BOM can be finalized:
+### 16.1 Unavailable / Unparsed Source Evidence
 
-1. **Open and parse `BOM_Main_Board.xlsx`** — the most component-dense board's BOM is binary
-2. **Open and parse `BOM_Power_Board.xlsx`** — cross-validate against CSV (CSV may be outdated)
-3. **Open and parse `BOM_PA.xlsx`** — verify against `.brd` extraction
-4. **Identify STM32F746 exact suffix** (VGT6 vs VET6 vs other) — determines flash/RAM size and package
-5. **Identify USB connector type** — Type-B, Micro-B, or Type-C
-6. **Stepper motor specification** — NEMA size, voltage, holding torque, step angle
-7. **Stepper motor driver IC** — what drives the STEP/DIR signals
-8. **Slip-ring specification** — channels, current, bandwidth, RPM
-9. **Cooling fan specification** — voltage, airflow, size, connector
-10. **Thermistor values** — resistance at 25°C, β-coefficient
-11. **PCB stack-up details for each board** — only Main Board stack-up image exists
-12. **Fastener BOM** — screws, standoffs, spacers
-13. **Thermal interface materials** — pads, paste
-14. **Cable/harness specifications** — SMA cable lengths, power wiring gauge
-15. **Main power supply specification** — input voltage range, current capacity
-16. **AT93C46A EEPROM usage** — is it populated? what is its function?
+| Artifact | Path | Why It Matters | Expected Information | Current Status |
+| -------- | ---- | -------------- | -------------------- | -------------- |
+| Binary Excel BOMs | `4_7_Production Files/Gerber_*/*.xlsx` | Main Board has 500+ unverified passives | Complete component lists for all boards | Pending extraction |
+| Mechanical DWG Files | `8_Utils/Mechanical_Drawings/*.dwg` | Contains mechanical dimensions and materials | Specifications for enclosure, waveguide, heatsinks | Unparsed |
+| Board Files | `4_6_Schematics/*/*.brd` | Verifies schematic against layout | Exact reference designators and placements | Partially extracted |
+| PCB Stack-up | `4_4_Board Stack-up/` | Needed for RF PCB fabrication | Layer thicknesses, dielectric constants for non-Main boards | Missing |
+
+### 16.2 Component Identification Gaps
+
+| Component | What Is Known | What Is Unknown | Why It Matters | Priority |
+| --------- | ------------- | --------------- | -------------- | -------- |
+| MCU | STM32F746xx (Cortex-M7) | Exact suffix (e.g. VGT6 vs VET6) | Determines package size, Flash, and RAM capacity | Critical |
+| USB Connector | Used for FT2232H/FT601 | Type-B, Micro-B, or Type-C | Required for mechanical design and BOM | High |
+| Stepper Motor | Azimuth rotation, GPIO controlled | NEMA size, voltage, holding torque, step angle | Cannot procure without exact mechanical/electrical specs | High |
+| Stepper Driver | GPIO step/dir interface | Driver IC/Module used | Required for BOM | High |
+| Slip Ring | Used for continuous 360° rotation | Channels, current rating, bandwidth, RPM | Critical mechanical/electrical interconnect | High |
+| Cooling Fan | GPIO controlled (EN_DIS_COOLING) | Voltage, airflow, size, connector | Required for thermal management and BOM | Medium |
+| Thermistors | 8x analog sensors read by ADS7830 | Resistance at 25°C, β-coefficient | Needed for temperature calculation accuracy | Medium |
+| Power Supply | Main DC input | Input voltage range, current capacity | Defines system power requirements | Critical |
+| EEPROM | AT93C46A datasheet present | Is it populated? What is its function? | Affects BOM and firmware initialization | Low |
+
+### 16.3 Manufacturing Information Gaps
+
+*   **PCB stack-ups:** Missing for Power, Freq Synth, PA, and Patch Antenna boards.
+*   **Fasteners:** No explicit BOM for screws, standoffs, or spacers.
+*   **Thermal interface materials:** Missing specs for thermal pads or paste (especially for QPA2962 GaN PAs).
+*   **Cable/harness specifications:** SMA cable lengths and power wiring gauge unknown.
+*   **Mechanical dimensions/tolerances:** Locked in DWG files.
+*   **Assembly information:** No sequence or torque specs provided.
+
+### 16.4 Functional / Architectural Unknowns
+
+*   **EEPROM function:** What data is stored in the AT93C46A?
+*   **Firmware-dependent component variants:** How does the firmware distinguish between FT2232H and FT601 build variants?
+*   **Hardware/software coupling:** Are the thermal trip points for the cooling fans hardcoded or configurable?
+*   **Calibration requirements:** How is the `Idq` closed-loop calibration procedure performed at boot?
 
 ---
 
-## 17. Recommended Sourcing Actions
+## 17. Reverse-Engineering Investigation Backlog
 
-**Priority 1 — Critical path:**
-1. Open binary Excel BOMs (`BOM_Main_Board.xlsx`, `BOM_Power_Board.xlsx`, `BOM_PA.xlsx`, `BOM_Freq_Synth.xlsx`, `BOM_Patch_Antenna.xlsx`) and extract full parts lists
-2. Verify long-lead ADI/Qorvo component availability (ADAR1000, ADF4382A, AD9523-1, QPA2962, ADTR1107)
-3. Confirm STM32F746 exact part number and package from schematic
+| ID | Investigation | Input Evidence | Expected Output | Priority | Dependency | Status |
+| -- | ------------- | -------------- | --------------- | -------- | ---------- | ------ |
+| INV-001 | Extract Main Board BOM | `BOM_Main_Board.xlsx` | Complete Main Board component list | Critical | Excel parsing | Pending |
+| INV-002 | Extract Power Board BOM | `BOM_Power_Board.xlsx` | Cross-validate against CSV | High | Excel parsing | Pending |
+| INV-003 | Extract PA Board BOM | `BOM_PA.xlsx` | Verify against `.brd` extraction | High | Excel parsing | Pending |
+| INV-004 | Resolve STM32F746 suffix | Main Board schematic/BOM | Exact MCU MPN/package | Critical | Schematic/BOM | Pending |
+| INV-005 | Identify USB Connector | Main Board `.brd` / Schematic | Connector MPN | High | Schematic/BRD | Pending |
+| INV-006 | Specify Stepper Motor/Driver | Schematic / DWG files | Exact motor and driver specs | High | Schematic/CAD | Pending |
+| INV-007 | Specify Slip Ring | `SlipRing.dwg` / Schematic | Slip ring specs (channels, bandwidth) | High | CAD/Schematic | Pending |
+| INV-008 | Extract Mechanical Specs | `8_Utils/Mechanical_Drawings/*.dwg` | Dimensions/materials for custom parts | High | DWG parsing | Pending |
+| INV-009 | Identify Thermistor Specs | Main Board schematic | Resistance and β-coefficient | Medium | Schematic | Pending |
+| INV-010 | Determine Power Supply Specs | Power Board schematic | Input voltage and current requirements | Critical | Schematic | Pending |
 
-**Priority 2 — Design validation:**
-4. Identify and document all Main Board reference designators from `.brd` file
-5. Resolve unknown components (stepper motor, slip-ring, fans, thermistors)
-6. Verify BMP180 availability or confirm BMP280 as drop-in replacement
-7. Validate FT2232H vs FT601 build variant configuration
+---
 
-**Priority 3 — Manufacturing preparation:**
-8. Extract mechanical dimensions/tolerances from DWG files
-9. Create fastener and assembly hardware BOM
-10. Define cable/harness specifications
-11. Document PCB fabrication requirements for all 5 boards
-12. Create assembly sequence documentation
+## 18. Recommended Next Actions
+
+### 18.1 Engineering / Reverse-Engineering Actions
+*   **Priority:** Critical
+*   **Reason:** Need to close major component identification gaps to understand system architecture fully.
+*   **Dependency:** Ability to parse Excel and DWG files.
+*   **Expected deliverable:** Updated Component Inventory with exact MPNs for MCU, stepper motor, and slip ring.
+
+### 18.2 BOM / Procurement Actions
+*   **Priority:** High
+*   **Reason:** Several high-performance components have historically constrained supply.
+*   **Dependency:** Confirmation of exact part numbers from investigations.
+*   **Expected deliverable:** RFQ (Request for Quote) for long-lead ADI/Qorvo components (ADAR1000, ADF4382A, AD9523-1, QPA2962). (Do not purchase until exact specs are verified).
+
+### 18.3 Manufacturing Preparation
+*   **Priority:** Medium
+*   **Reason:** Need to define physical assembly requirements.
+*   **Dependency:** Extraction of mechanical DWG files and PCB schematics.
+*   **Expected deliverable:** Fastener BOM, cable harness specifications, and complete PCB fabrication notes.
+
+---
+
+## 19. BOM Readiness
+
+| Area | Status | Explanation |
+| ---- | ------ | ----------- |
+| Electronic components | Partial | Active ICs mostly identified; 500+ passives locked in binary BOMs. |
+| PCB assemblies | Mostly Ready | Gerber files present; stack-ups needed for non-Main boards. |
+| Mechanical components | Blocked | Custom parts locked in DWG files; exact motor/slip-ring unknown. |
+| Cables/harnesses | Unknown | No lengths or specifications provided in repository. |
+| Consumables | Unknown | Thermal paste, threadlocker, adhesives unspecified. |
+| Exact MPN coverage | Partial | Good coverage on RF/Digital ICs; poor on passives/electromechanical. |
+| Quantity coverage | Partial | Known for ICs; unknown for Main Board passives. |
+| Manufacturing data | Partial | Gerbers exist; assembly instructions and CAD specs missing. |
+| Overall procurement readiness | Blocked | Cannot order full BOM until Excel files and DWGs are parsed. |
+
+---
+
+## 20. Sourcing Risk Summary
+
+*   **Long lead time:** QPA2962 (GaN PA), ADAR1000, ADF4382A, AD9523-1. These are high-performance ADI/Qorvo parts with historically constrained supply.
+*   **Custom manufactured:** Enclosure, waveguide, heatsinks (require CNC machining specs from unparsed DWG files).
+*   **External supplier dependency:** Main Board is a 10-layer RO4350B hybrid PCB. Very few fabricators (e.g., PCBWay) can handle this stack-up with 100 µm cores.
+*   **Obsolete/discontinued:** BMP180 (successor is BMP280/BMP390). Firmware changes may be required if exact replacement isn't pin-compatible.
+*   **Specification incomplete:** Stepper motor, slip-ring, cooling fans, thermistors, and power supply.
+*   **Exact MPN unknown:** STM32F746xx (suffix unknown), USB connector type.
+*   **Quantity uncertain:** Main Board passives (locked in binary Excel BOM).
 
 ---
 
