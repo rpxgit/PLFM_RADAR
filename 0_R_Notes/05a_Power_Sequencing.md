@@ -56,3 +56,45 @@ The FPGA requires its core, auxiliary, and I/O voltages to come up in a specific
 
 - [[05_Firmware_MCU]]
 - [[03b_Power_Board]]
+
+
+## 2. RF Front-End (ADTR1107) Bias Sequencing
+
+The ADTR1107 T/R chips on the Main Board have a strict bias-up and bias-down procedure enforced by the MCU via DACs:
+
+**Bias-Up:**
+1. Connect all GND pins.
+2. Set VDD_SW to 3.3V.
+3. Set VSS_SW to -3.3V.
+4. Set CTRL_SW to 3.3V.
+5. Set VGG_PA to -1.75V (Negative Gate Bias).
+6. Set VDD_PA to 0V.
+7. Set VGG_LNA to 0V.
+8. Set VDD_LNA to 3.3V.
+9. Apply RF Signal.
+10. Apply +5V to VDD_PA.
+
+**Bias-Down:**
+1. Turn off RF Signal.
+2. Set VDD_LNA to 0V.
+3. Set CTRL_SW to 0V.
+4. Set VSS_SW to 0V.
+5. Set VDD_SW to 0V.
+
+## 3. GaN PA (QPA2962) Bias Sequencing
+
+The Extended Variant PA boards follow the strict GaN depletion-mode rules:
+
+**Bias-Up:**
+1. Set ID limit to 2840 mA.
+2. Set VG to -4.0V (Pinch-off).
+3. Set VD to +22V.
+4. Adjust VG more positive until IDQ = 1680 mA.
+5. Apply RF signal.
+
+**Bias-Down:**
+1. Turn off RF Signal.
+2. Reduce VG to -4.0V (IDQ ~ 0 mA).
+3. Set VD to 0V.
+4. Turn off VD supply.
+5. Turn off VG supply.

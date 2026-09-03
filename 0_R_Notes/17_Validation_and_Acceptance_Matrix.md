@@ -53,7 +53,9 @@ Testing must proceed sequentially to isolate faults.
 | **VAL-002** | V3 | USB | High-Speed FIFO | PyFTDI test script | PC | 100MB/s throughput | Zero dropped packets | Script Output | None | Open |
 | **VAL-003** | V4 | MCU | AD9523 Init | SPI Logic capture | Logic Analyzer | PLL locks | LOCK pin asserts high | LA Capture | None | Open |
 | **VAL-004** | V6 | System| Point Target | Corner reflector at 100m | GUI | Clear peak in Range bin | SNR > 15dB | GUI Screenshot | None | Open |
-| **VAL-005** | V7 | RF | Output Power | Measure Tx port | Spectrum Analyzer | TBD | Measurement required — baseline not yet established | SA Trace | None | Open |
+| **VAL-005** | V7 | RF | Output Power | Measure Tx port | Spectrum Analyzer | ~30 dBm (Nexus) / ~40 dBm (Extended) | Within ±1 dB of target | SA Trace | None | Open |
+| **VAL-006** | V7 | RF | Phase Noise | Measure Tx carrier | Signal Analyzer | Clean CW LO spectrum | <-90 dBc/Hz @ 100kHz offset | SA Trace | None | Open |
+| **VAL-007** | V7 | RF | Beam Steering | Measure Antenna Pattern | Anechoic Chamber | Main lobe shifts correctly | Angle error < 2° | Antenna Pattern Plot | None | Open |
 
 *(Note: Matrix will be expanded as physical bring-up proceeds).*
 

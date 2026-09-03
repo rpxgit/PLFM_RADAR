@@ -28,6 +28,8 @@ canonical: true
 | UNK-008 | Hardware/BOM | EEPROM (`AT93C46A`) | Datasheet present | Unclear if populated or what data it holds. | Hypothesis | **P3 (Minor)** | Schematic review / MCU code review | None | Open |
 | UNK-009 | Variants | Extended Variant physical existence | `BOM_PA.xlsx`, `Waveguide.dwg` | Unclear if the 20km version was ever prototyped or just designed. | Hypothesis | **P2 (Important)** | Production records check | None | Open |
 | UNK-010 | Power | Power Supply requirements | `PowerBoard.sch/csv` | Main DC input voltage range and current capacity unknown. | Unknown | **P0 (Blocker)** | Power schematic review | None | Open |
+| UNK-011 | Hardware/RF | RF Trace Insertion Losses | `RADAR_Main_Board.sch` | Cannot calculate exact RF budget without PCB trace loss and passives. | Unknown | **P2 (Important)** | EM Simulation / Physical VNA measurement | None | Open |
+| UNK-012 | Hardware/RF | SPDT Switch Routing Logic | `M3SWA2-34DR+` x17 in BOM | Hypothesized: 1 T/R switch at ADAR1000 common port, 16 PA bypass switches. | Hypothesis | **P1 (Major Risk)** | Schematic review / Firmware routing logic | None | Open |
 
 ---
 
@@ -196,3 +198,10 @@ We possess a highly confident understanding of the system's electronic architect
 ## Related Notes
 
 - [[10_Reverse_Engineering_Plan]]
+
+
+### UNK-015: FPGA Proprietary IP Blockers (RESOLVED)
+**Status:** Resolved. The repository contains 0 proprietary IP blocks. The FFT and DDC are pure Verilog.
+
+### UNK-016: Chirp Generation Source (RESOLVED)
+**Status:** Resolved. The FMCW/PLFM chirp is generated digitally by the FPGA (`plfm_chirp_controller`), converted to analog IF by the AD9708 DAC, and upconverted by the LTC5552 mixer using a fixed CW LO from the ADF4382.

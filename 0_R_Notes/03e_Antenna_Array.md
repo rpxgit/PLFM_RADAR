@@ -26,10 +26,16 @@ The AERIS-10 product relies on two completely distinct antenna configurations de
 
 ### AERIS-10N (Nexus Variant)
 *   **Type:** Microstrip Patch Antenna Array
-*   **Array Size:** 8x16 elements
+*   **Array Size:** 8x16 elements (128 elements)
+*   **Mechanical Geometry (EVID-CAD1):**
+    *   **Substrate:** Rogers RO4350B, 0.102 mm thickness (1 oz / 0.035 mm copper)
+    *   **Patch Element:** 9.545 mm (Width) x 7.401 mm (Length)
+    *   **Feed:** Probe-fed at y = 1.49 mm from patch center
+    *   **Element Spacing:** 14.285 mm ($\lambda/2$ at 10.5 GHz)
+    *   **Required Fabrication Tolerance:** $\pm0.025$ mm (1 mil) due to narrow 50 MHz bandwidth.
 *   **Range:** 3 km
 *   **Interface:** Connects directly to the ADTR1107 front-ends on the Main Board.
-*   **Evidence:** `Patch_Anetnna_16_8.sch`, `Patch_Anetnna_16_8.brd`
+*   **Evidence:** `Patch_Anetnna_16_8.sch`, `Patch_Anetnna_16_8.brd`, `AERIS_Antenna_Report.pdf`
 
 ### AERIS-10E (Extended Variant)
 *   **Type:** Dielectric-Filled Slotted Waveguide Array
@@ -59,7 +65,7 @@ The AERIS-10 product relies on two completely distinct antenna configurations de
 
 | ID | Unknown | Why It Matters | Evidence Available | Required Investigation |
 | -- | ------- | -------------- | ------------------ | ---------------------- |
-| ANT-01 | Patch Stack-up | What is the exact PCB substrate for the Patch Antenna? | `4_4_Board Stack-up` | Verify if stack-up documentation exists for the Patch board. |
+| ANT-01 | Patch Stack-up | What is the exact PCB substrate for the Patch Antenna? | `AERIS_Antenna_Report.pdf` | **RESOLVED**: 0.102mm Rogers RO4350B (1oz Cu). |
 | ANT-02 | Waveguide Integration | How do the 16 PA boards mechanically and electrically mate to the waveguide feeds? | `DFSWA.dwg` | Parse DWG CAD files. |
 | ANT-03 | Stepper Motor / Slip-ring | What are the exact part numbers for the mechanical actuation system? | `README.md`, `SlipRing.dwg` | Parse DWG CAD files. |
 

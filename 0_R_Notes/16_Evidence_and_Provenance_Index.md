@@ -146,3 +146,42 @@ Important conclusions currently supported primarily by inference or weak documen
 * **Replication-Critical Evidence Gaps:** The unparsed BOM prevents any hardware fabrication.
 
 This index guarantees that no engineering assumption in the AERIS-10 project is treated as fact without a direct link to the underlying repository evidence.
+
+
+### EVID-BOM1 — Main Board Excel Extraction
+- **Source:** `Hardware/BOM/BOM_Main_Board.xlsx` (Parsed via Zip/XML Extraction)
+- **Finding:** Contains 104 exact MPNs for the Main Board.
+- **Key Discovers:** Proves the RF front-end utilizes 16x ADTR1107 T/R chips rather than QPA2962. Identifies LTC5552 mixers and AD9484 ADC. Confirms 500+ RF matching passives.
+
+
+### EVID-CAD1 — Patch Antenna FDTD Report
+- **Source:** `docs/AERIS_Antenna_Report.pdf`
+- **Finding:** Provides the exact FDTD-tuned mechanical geometry for the 10.5 GHz patch antenna element.
+- **Dimensions:** 9.545 mm x 7.401 mm on 0.102 mm RO4350B substrate. Fabricator must hold ±0.025 mm tolerance.
+
+
+
+### EVID-BOM1 — Main Board Excel Extraction
+- **Source:** `Hardware/BOM/BOM_Main_Board.xlsx` (Parsed via Zip/XML Extraction)
+- **Finding:** Contains 104 exact MPNs for the Main Board.
+- **Key Discovers:** Proves the RF front-end utilizes 16x ADTR1107 T/R chips rather than QPA2962. Identifies LTC5552 mixers and AD9484 ADC. Confirms 500+ RF matching passives.
+
+
+### EVID-CAD1 — Patch Antenna FDTD Report
+- **Source:** `docs/AERIS_Antenna_Report.pdf`
+- **Finding:** Provides the exact FDTD-tuned mechanical geometry for the 10.5 GHz patch antenna element.
+- **Dimensions:** 9.545 mm x 7.401 mm on 0.102 mm RO4350B substrate. Fabricator must hold ±0.025 mm tolerance.
+
+
+### EVID-PWR1 — Power Management Matrix
+- **Source:** `3_Power Management/Power Management V6.xlsx`
+- **Finding:** Details the entire power tree, current budget, and exact gate-drain bias sequencing for both the ADTR1107 and QPA2962 RF devices.
+
+
+### EVID-FPGA1 — FPGA Pure Verilog Architecture
+- **Source:** `9_Firmware/9_2_FPGA/` (`xfft_16.v`, `fft_engine.v`, `nco_400m_enhanced.v`, `build_50t.tcl`)
+- **Finding:** The design is completely devoid of Xilinx proprietary IP blocks. It utilizes a custom Verilog FFT engine and NCO, driven by a batch TCL build script targeting `xc7a50tftg256-2`.
+
+### EVID-FPGA2 — Digital Chirp Generation
+- **Source:** `9_Firmware/9_2_FPGA/radar_transmitter.v`
+- **Finding:** Proves that the PLFM chirp is generated digitally in the FPGA via `plfm_chirp_controller_enhanced` and output through the AD9708 DAC, rather than autonomously by the ADF4382 synthesizer.

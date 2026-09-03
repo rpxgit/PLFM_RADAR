@@ -2,7 +2,7 @@
 type: reverse-engineering-note
 status: active
 domain: system
-confidence: high
+confidence: medium
 canonical: true
 ---
 
@@ -19,7 +19,7 @@ canonical: true
 
 **AERIS-10** is a highly integrated, 10.5 GHz class, Pulsed Linear Frequency Modulated (LFM) phased-array radar system. It is designed to perform advanced spatial target detection and range-Doppler estimation using a hybrid digital-RF architecture.
 
-The core operating concept relies on generating an LFM chirp via an integrated frequency synthesizer, steering the RF beam using analog phase shifters, and amplifying the signal for transmission. Echoes are received, downconverted, digitized, and routed to an FPGA. The FPGA performs the heavy digital signal processing (DSP)—including Fast Fourier Transforms (FFT) and Constant False Alarm Rate (CFAR) detection—before streaming the results over a high-speed USB interface to a host Python GUI.
+The core operating concept relies on generating a digital PLFM (Polyphase Linear FM) chirp in the FPGA, converting it to an analog IF chirp via the AD9708 DAC, and upconverting it to X-band using LTC5552 mixers with a fixed CW Local Oscillator (LO) provided by the ADF4382 synthesizer. The RF beam is steered using ADAR1000 analog phase/gain beamformers, and amplified for transmission by the ADTR1107 front-end (and optional QPA2962 GaN PAs). Echoes are received, downconverted, digitized, and routed back to the FPGA. The FPGA performs the heavy digital signal processing (DSP)—including Fast Fourier Transforms (FFT) and Constant False Alarm Rate (CFAR) detection—before streaming the results over a high-speed USB interface to a host Python GUI.
 
 A defining architectural feature of AERIS-10 is the strict separation of the **Data Plane** and the **Control Plane**. The high-speed radar data completely bypasses the system's microcontroller (STM32), moving directly from the FPGA to the USB bridge (FT2232H). The MCU is relegated exclusively to out-of-band management: initializing clocks, configuring RF SPI registers, and enforcing thermal and bias safety interlocks.
 
@@ -36,14 +36,14 @@ The project currently exists as a deeply mapped digital reconstruction. Firmware
 * **Ecosystem:** Analog Devices (AD9523-1, ADF4382, ADAR1000) (*Confirmed*)
 
 ### Nexus Variant
-* **Range Class:** ~3 km (*Inferred*)
+* **Range Class:** ~3 km (*Unverified Marketing Claim*)
 * **Antenna:** PCB Patch Antenna (*Confirmed*)
 * **Transmit Power:** ~1 W (*Inferred*)
 
 ### Extended Variant
-* **Range Class:** ~20 km (*Inferred*)
+* **Range Class:** ~20 km (*Unverified Marketing Claim*)
 * **Antenna:** Machined Waveguide (*Confirmed*)
-* **Transmit Power:** ~10 W GaN PA (*Inferred via QPA2962 BOM presence*)
+* **Transmit Power:** ~1W ADTR1107 T/R Front-End (*Inferred via ADTR1107 (T/R Front-End) BOM presence*)
 
 ---
 
@@ -101,13 +101,13 @@ The FPGA handles the mathematically intensive acquisition. ADC samples stream in
 The digital core. Hosts the XC7A50T FPGA, STM32 MCU, and FT2232H. It routes the high-speed data buses and distributes the control signals (SPI/I2C/GPIO) to the daughterboards via board-to-board connectors.
 
 ### 5.2 Power Board
-Accepts external DC input (`UNK-010`) and generates the 1.0V, 1.8V, 3.3V, and 5.0V rails. Critically, it utilizes an LM2662 inverter to generate a -5V reference. This negative rail is required for the DAC5578 to safely bias the GaN PAs.
+Accepts external DC input (`UNK-010`) and generates the logic rails. Critically, it utilizes an LM2662 inverter to generate a -5V reference. This negative rail is required for the DAC5578 to safely bias the GaN PAs. Exact voltage/current ratings are subject to verification pending the BOM extraction.
 
 ### 5.3 Frequency Synthesizer Board
-Hosts the AD9523-1 clock generator and the ADF4382 synthesizer. The AD9523-1 distributes phase-aligned clocks to the FPGA, ADC, and synthesizer, ensuring system-wide coherency. The ADF4382 generates the 10.5 GHz LFM chirp.
+Hosts the AD9523-1 clock generator and the ADF4382 synthesizer. 
 
 ### 5.4 Power Amplifier Board
-Houses the QPA2962 GaN PAs. GaN depletion-mode transistors are normally-on; if drain voltage (Vd) is applied while the gate (Vg) is at 0V, the device will draw massive current and immediately destroy itself. The DAC5578 must hold the gates at deep pinch-off (-5V) prior to drain activation.
+Houses the ADTR1107 (T/R Front-End) GaN PAs (where supported by BOM). GaN depletion-mode transistors are normally-on; if drain voltage (Vd) is applied while the gate (Vg) is at 0V, the device can draw massive current. The DAC5578 must hold the gates at deep pinch-off (-5V) prior to drain activation.
 
 ### 5.5 Antenna Array
 A phased-array structure. The Nexus variant utilizes a PCB patch antenna, while the Extended variant utilizes a machined waveguide interface. The ADAR1000 beamformer steers the beam electronically. Mechanical dimensions are unverified due to unparsed CAD (`UNK-002`).
@@ -116,21 +116,19 @@ A phased-array structure. The Nexus variant utilizes a PCB patch antenna, while 
 
 ## 6. Clock and Timing Architecture
 
-A highly stable reference feeds the **AD9523-1**, which distributes synchronized clocks to the FPGA, the data converters (ADC/DAC), and the ADF4382 synthesizer. 
-Coherent clocking is absolutely critical for an LFM phased array:
-* The LO mixing down the received echo must be phase-coherent with the transmitted chirp to accurately calculate Doppler shifts.
-* The ADC sampling must be exactly synchronized to the FPGA DSP clock domains to prevent sample slipping.
+The AD9523-1 provides system clock/reference distribution. Exact destinations, frequencies, and phase relationships remain subject to verification. 
 
-*(Measured phase noise is unknown; baseline measurement required).*
+Coherent clocking is an **architectural requirement** for an LFM phased array (to calculate Doppler shifts and prevent sample slipping), **not a measured performance result**. No phase noise or alignment guarantees can be claimed without physical evidence.
 
 ---
 
 ## 7. RF Signal Chain
 
-**Reference → Frequency Synthesis (ADF4382) → Waveform/LO Generation → Beamforming (ADAR1000) → PA (QPA2962) → Antenna → Free Space → Target → Receive Aperture → RF Conditioning/Conversion → ADC → FPGA**
+**Reference → Clock Generation (AD9523) & LO Synthesis (ADF4382) → Digital PLFM Generation (FPGA) → IF DAC (AD9708) → Up-Mixer (LTC5552) → Beamforming (ADAR1000) → T/R Front-End (ADTR1107) → [Optional GaN PA (QPA2962)] → Antenna → Free Space → Target → Receive Aperture → T/R Switch / LNA (ADTR1107) → Beamforming (ADAR1000) → Down-Mixer (LTC5552) → IF Amp (AD8352) → ADC (AD9484) → FPGA**
 
-* **Confirmed:** ADF4382 generates the chirp. ADAR1000 controls phase/gain. QPA2962 amplifies it.
-* **Unresolved Information:** The exact downconversion architecture (mixer models, LNA gain, filters) is obscured by the unparsed BOM (`UNK-001`).
+* **Confirmed:** FPGA generates the PLFM digital chirp. AD9708 converts it to analog IF. ADF4382 generates a fixed CW LO. LTC5552 mixers perform up/down conversion. ADAR1000 controls phase/gain. 
+* **Confirmed:** ADTR1107 (T/R Front-End) amplifies the TX and RX signals, and contains internal T/R switching.
+* **Inferred:** Additional SPDT switches (M3SWA2-34DR+) bypass the unidirectional GaN PA (QPA2962) during the receive cycle on the Extended variant.
 
 ---
 
@@ -158,7 +156,7 @@ The STM32F746 (`05_Firmware_MCU.md`) executes a strict state machine:
 5. Configure ADF4382 synthesizer via SPI.
 6. Initialize ADAR1000 beamformer via SPI.
 
-The MCU **does not** touch the radar echo data. It only manages state.
+The MCU **does not** touch the radar echo data. It only manages state, routing the host's normal high-speed data directly to the FPGA.
 
 ## 11. Host Software
 The Python application (`06_Software_GUI.md`) leverages PyQt6 for visualization and `pyftdi` for high-speed USB interaction. `radar_protocol.py` parses the binary stream from the FT2232H, rendering FFT range/Doppler plots for the user, while sending configuration commands (like beam steering angles) back down the USB pipe.
@@ -169,15 +167,15 @@ The Python application (`06_Software_GUI.md`) leverages PyQt6 for visualization 
 
 ## 12. End-to-End Radar Operation
 1. External DC power applied.
-2. Power board establishes 1.0V, 1.8V, 3.3V, 5.0V, and -5V.
+2. Power board establishes logic and negative rails.
 3. MCU boots and asserts reset lines.
-4. MCU initializes AD9523 clock tree via SPI.
+4. MCU initializes clock tree via SPI.
 5. MCU configures DAC5578 (I2C) to assert -5V PA gate bias.
 6. MCU enables PA drain power (GPIO).
 7. FPGA boots from SPI Flash.
 8. MCU configures ADF4382 synthesizer (SPI).
 9. MCU initializes ADAR1000 beamformer (SPI).
-10. FPGA begins driving LFM trigger; TX chain activated.
+10. Waveform generation begins; TX chain activated.
 11. RF propagates, reflects off target.
 12. RX chain downconverts echo, ADC digitizes.
 13. FPGA DSP executes FFT/CFAR.
@@ -186,7 +184,7 @@ The Python application (`06_Software_GUI.md`) leverages PyQt6 for visualization 
 
 ## 13. System States and Safety
 The critical safety state resides between `INITIALIZING` and `RF_READY`. 
-**PA bias → drain activation** is a non-negotiable hardware safety requirement. The MCU state machine explicitly manages the DAC5578 to ensure the QPA2962 GaN transistors are pinched off before massive drain current is made available. Failure to execute this state guarantees catastrophic hardware destruction.
+**PA bias → drain activation** is a non-negotiable hardware safety requirement. The MCU state machine explicitly manages the DAC5578 to ensure the GaN transistors are pinched off before drain voltage is applied. Incorrect bias sequencing can produce destructive current draw and may damage the GaN PA.
 
 ---
 
@@ -198,20 +196,26 @@ The critical safety state resides between `INITIALIZING` and `RF_READY`.
 | :--- | :--- | :--- | :--- | :--- |
 | Operating frequency | ~10.5 GHz | High | ADF4382/ADAR1000 Specs | X-Band |
 | Architecture | Pulsed LFM phased array | High | RTL / Firmware | |
-| Nexus range class | ~3 km | Low | README | *Marketing claim* |
-| Extended range class | ~20 km | Low | README | *Marketing claim* |
-| Nexus PA power | ~1 W | Medium | Inference | Standard ADTR1107 limits |
-| Extended PA power | ~10 W | High | QPA2962 Specs | Supported by BOM |
 | Production FPGA | XC7A50T | High | Vivado constraints | `top.v` |
 | MCU | STM32F746 | High | `main.cpp` | Suffix UNK-003 |
 | USB bridge | FT2232H | High | Python bindings | |
+| Beamformer | ADAR1000 | High | `radar_protocol.py` | |
+| Synthesizer | ADF4382 | High | STM32 SPI drivers | |
 
 ## 15. Performance Envelope
-**Unverified Performance Claims:** Range, exact transmit power, bandwidth, phase noise, and angular resolution are currently strictly theoretical or inferred from marketing claims. 
 
-**Engineering Inference:** A 10W X-Band GaN PA paired with a high-gain waveguide aperture mathematically supports ranges in the >10km class depending on target RCS, but without a known receiver noise figure (blocked by the unparsed BOM), calculating the true radar equation is speculative. 
+### Documented Claims
+* Nexus Range: ~3 km.
+* Extended Range: ~20 km.
 
-*No numerical performance guarantees are made prior to physical V7 Validation.*
+### Engineering Inferences
+* A multi-channel GaN PA array operating in X-Band mathematically supports long-range detection, provided sufficient antenna gain.
+
+### Theoretical Model
+* Range capabilities must be mathematically validated against the radar equation (see Appendix H) rather than accepted as fact.
+
+### Measured Performance
+* **None.** No measured performance data (range, output power, bandwidth, phase noise, or angular resolution) is currently available in the repository.
 
 ---
 
@@ -220,7 +224,7 @@ The critical safety state resides between `INITIALIZING` and `RF_READY`.
 ## 16. Current Replication State
 The project is at **R0/R1 (Digital Reconstruction Ready)** and definitively blocked at **R2 (Hardware Fabrication Ready)**.
 * **Understood:** System architecture, firmware state machines, FPGA DSP pipelines, and host GUI software protocols are deeply mapped and understood.
-* **Blocked:** Physical fabrication is blocked by `UNK-001` (Unparsed binary Excel BOM) and `UNK-002` (Unparsed AutoCAD DWG). We cannot purchase passives, manufacture the PCB, or mill the waveguide.
+* **Blocked:** Physical fabrication is blocked by `UNK-001` is Resolved and `UNK-002` (Unparsed AutoCAD DWG). We cannot purchase passives, manufacture the PCB, or mill the waveguide.
 * **Unverified:** FPGA compilation against missing proprietary Xilinx IP (`RE-005`), and the exact input DC voltage constraint (`UNK-010`).
 
 ## 17. Reproduction Definition of Done
@@ -235,10 +239,10 @@ Following the canonical `[[10_Reverse_Engineering_Plan]]`:
 # PART VII — ENGINEERING RISKS AND LIMITATIONS
 
 ## 18. Known Risks
-1. **BOM extraction (UNK-001):** *Severity: Critical.* Without exactly 500+ matched passives, the 10.5 GHz RF matching networks will fail.
+1. **BOM extraction (UNK-001):** *Severity: Critical.* Without exactly matched passives, the RF matching networks will fail.
 2. **Missing Xilinx proprietary IP:** *Severity: High.* If the DSP pipeline relies on licensed IP cores (e.g., specific FFTs), rewriting them adds weeks of delay.
-3. **RF PCB fabrication tolerances:** *Severity: High.* 10-layer RO4350B boards are extremely sensitive to fab house etching tolerances; misaligned trace widths will destroy impedance matching.
-4. **Calibration uncertainty:** *Severity: Medium.* The exact mathematical algorithm to generate the ADAR1000 beamsteering phase/gain compensation matrix is undocumented.
+3. **RF PCB fabrication tolerances:** *Severity: High.* RF boards are sensitive to fab house etching tolerances; misaligned trace widths will destroy impedance matching.
+4. **Calibration uncertainty:** *Severity: Medium.* The mathematical algorithm to generate the ADAR1000 beamsteering phase/gain compensation matrix is undocumented.
 
 ## 19. What Cannot Yet Be Claimed
 Current evidence does **not** prove:
@@ -257,58 +261,47 @@ Current evidence does **not** prove:
 
 > **"If I wanted to reproduce the AERIS-10 system from the currently available repository, approximately how much would it cost in INR and how long would it take?"**
 
-All costs are engineering estimates intended to seed the model. Exact sourcing quotes are required before final authorization.
+All costs are initial engineering estimates intended to seed the model. Exact sourcing quotes are required before final authorization.
 
 ## A.1 Cost Categories
-Cost is dominated by: PCB Fabrication (RO4350B), Specialized RF components (GaN PAs, Beamformers), RF Lab Equipment Rental (12GHz VNA), and specialized Engineering Labor.
+Cost is divided into: Parts-only, Fabrication, Assembly, Equipment, Laboratory Access, Engineering Labor, Iteration, and Contingency.
 
 ## A.2 BOM-Based Parts Estimate
+*Note: This is a Level-0 estimate pending actual BOM extraction (RE-001).*
 
-| Category | Component | Qty | Unit Estimate (INR) | Extended Estimate (INR) | Confidence |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| FPGA | XC7A50T | 1 | ₹4,000 | ₹4,000 | High |
-| MCU | STM32F746 | 1 | ₹1,500 | ₹1,500 | High |
-| USB | FT2232H | 1 | ₹500 | ₹500 | High |
-| Clock | AD9523-1 | 1 | ₹1,200 | ₹1,200 | High |
-| Synthesizer | ADF4382 | 1 | ₹3,000 | ₹3,000 | High |
-| Beamformer | ADAR1000 | 2+ | ₹15,000 | ₹30,000+ | Medium |
-| PA | QPA2962 (GaN) | 2+ | ₹25,000 | ₹50,000+ | Medium |
-| RF passives | Assorted | 500 | N/A | ₹15,000 | Low (BOM Blocked) |
-| PCB | 10-layer RO4350B | 5 (Min) | N/A | ₹1,50,000 | Medium |
+| Component | MPN | Qty | Unit Cost Low | Expected | High | Availability | Source | Confidence |
+| :--- | :--- | --: | --: | --: | --: | :--- | :--- | :--- |
+| FPGA | XC7A50T | 1 | ₹3k | ₹4k | ₹6k | Good | Mouser/Digikey | High |
+| MCU | STM32F746 | 1 | ₹1k | ₹1.5k | ₹2k | Good | Mouser/Digikey | High |
+| Beamformer | ADAR1000 | 2+ | ₹10k | ₹15k | ₹25k | Lead Times | Analog Devices | Medium |
+| PA | ADTR1107 (T/R Front-End) | 2+ | ₹15k | ₹25k | ₹35k | Restricted | Qorvo | Low |
+| RF passives | UNKNOWN | UNK | UNK | UNK | UNK | UNK | Extracted EVID-BOM1 | Low |
 
 ## A.3 Three Cost Scenarios
-
-### Scenario 1 — Minimum Functional Replica (Aggressive)
-* Build one functional Nexus patch-antenna prototype using evaluation boards where custom fab fails. 
-* **Estimated INR Range:** ₹10 Lakh – ₹15 Lakh.
-
-### Scenario 2 — High-Fidelity Replica (Realistic)
-* 1:1 PCB reproduction, proper RF validation, includes a mandatory hardware respin (Revision B) and 2 months of VNA rental.
-* **Estimated INR Range:** ₹25 Lakh – ₹40 Lakh.
-
-### Scenario 3 — Production-Reproducible (Conservative)
-* Fully documented, automated test fixtures, calibration chamber time, CNC enclosures, multiple yield runs.
-* **Estimated INR Range:** ₹60 Lakh – ₹80 Lakh.
+* **Scenario 1 — Minimum Functional Replica:** Assume one functional prototype, lowest reasonable engineering expenditure, reused lab equipment.
+* **Scenario 2 — High-Fidelity Replica:** Assume proper RF validation, calibration, multiple prototype iterations, laboratory-grade measurement capability.
+* **Scenario 3 — Production-Reproducible Replica:** Assume repeatable fabrication, production-intent PCB, validated mechanics, manufacturing documentation.
 
 ## A.4 Parts-Only Cost (No Labor/Equipment)
-* **Low Estimate (1 Prototype, 0 failures):** ₹2.5 Lakh.
-* **Expected Estimate (3 Prototypes, 1 respin):** ₹7.5 Lakh.
-* **High Estimate (Burned GaN PAs, 2 respins):** ₹12 Lakh.
+* **Low Estimate (1 Prototype, 0 failures):** ~₹2 Lakh.
+* **Expected Estimate (3 Prototypes, 1 respin):** ~₹6 Lakh.
+* **High Estimate (Burned PAs, 2 respins):** ~₹10 Lakh.
 
-## A.5 Engineering Cost (Assumed ₹5k-10k/day)
-| Workstream | Est. Days | Role | Expected INR |
-| :--- | :--- | :--- | :--- |
-| Hardware / BOM extraction | 15 | Hardware Eng | ₹1,00,000 |
-| PCB Fab Management | 10 | PCB Eng | ₹75,000 |
-| FPGA & MCU Bring-up | 20 | Embedded Eng | ₹1,50,000 |
-| RF Activation & Matching | 30 | RF Eng (Specialized) | ₹3,00,000 |
-| Integration & Test | 15 | Systems Eng | ₹1,00,000 |
-| **Total Estimated Labor** | **90** | | **₹7,25,000** |
+## A.5 Engineering Cost
+*Note: Assumed blended engineering rate of ₹4,000–₹10,000 per person-day.*
+
+| Workstream | Est. Days | Role | Low INR | Expected INR | High INR |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Hardware reconstruction | 15 | Hardware Eng | ₹60k | ₹1.0L | ₹1.5L |
+| PCB/layout reconstruction | 10 | PCB Eng | ₹40k | ₹75k | ₹1.0L |
+| STM32 firmware | 10 | Embedded Eng | ₹40k | ₹75k | ₹1.0L |
+| RF reconstruction | 30 | RF Eng | ₹1.5L | ₹3.0L | ₹4.5L |
+| Integration | 15 | Systems Eng | ₹60k | ₹1.0L | ₹1.5L |
 
 ## A.6 Equipment Requirements
-* **Essential Buy:** 4-Channel Oscilloscope, DMM, Lab Power Supplies (₹1.5 Lakh).
-* **Essential Rent:** 12+ GHz VNA, Spectrum Analyzer. (Rent: ~₹1.5 Lakh/month).
-* **Buy Everything Scenario:** > ₹60 Lakh (Cost prohibitive for VNA).
+* **Essential Buy:** 4-Channel Oscilloscope, DMM, Lab Power Supplies.
+* **Essential Rent:** 12+ GHz VNA, Spectrum Analyzer (Rent: ~₹1 Lakh–₹2.5 Lakh/month).
+* **Buy Everything Scenario:** Cost prohibitive for VNA (>₹50L).
 
 ## A.7 Manufacturing Model
 * **PCB Fabrication:** Specialist RF Vendor (Outsourced).
@@ -316,9 +309,9 @@ Cost is dominated by: PCB Fabrication (RO4350B), Specialized RF components (GaN 
 * **Mechanical:** CNC Machining Shop (Outsourced).
 
 ## A.8 Prototype Iteration Allowance
-* **Optimistic:** 1 major hardware iteration (Included in baseline).
-* **Realistic:** 2–3 iterations (Add ₹4 Lakh).
-* **Conservative:** 3–5 iterations + RF redesign (Add ₹15 Lakh).
+* **Optimistic:** 1 major hardware iteration.
+* **Realistic:** 2–3 iterations.
+* **Conservative:** 3–5 iterations + RF redesign.
 
 ---
 
@@ -326,11 +319,21 @@ Cost is dominated by: PCB Fabrication (RO4350B), Specialized RF components (GaN 
 
 # Appendix B — Estimated Replication Timeline
 
-## B.1 Work Breakdown
-1. **Phase 0:** Extract BOM (`RE-001`) and CAD (`RE-002`). (Zero Slack).
-2. **Phase 1-3:** Digital compilation verification & Procurement.
-3. **Phase 4-5:** PCB Fabrication and Assembly (Lead times dominate).
-4. **Phase 6-11:** Staged Hardware, Power, and RF Bring-up.
+Calendar time and engineering person-days are different quantities.
+
+## B.1 Work Breakdown & Dependency Table
+
+| Task | Person-Days | Dependencies | Parallelizable | Earliest Start | Est. Duration (Weeks) |
+| :--- | --: | :--- | :--- | :--- | --: |
+| BOM Extraction | 3 | None | No | Week 1 | 1 |
+| CAD Extraction | 2 | None | Yes | Week 1 | 1 |
+| Hardware Reconstruction | 10 | BOM | Yes | Week 2 | 2 |
+| Procurement | 5 | BOM/HW | No | Week 4 | 4-6 (Lead) |
+| PCB Fabrication | 2 | Procurement | No | Week 8 | 4 (Lead) |
+| Assembly | 2 | PCB | No | Week 12 | 2 |
+| Power Bring-up | 5 | Assembly | No | Week 14 | 1 |
+| Digital/MCU Bring-up | 10 | Power Bring-up | No | Week 15 | 2 |
+| RF Bring-up | 15 | Digital | No | Week 17 | 3 |
 
 ## B.2 Dependency Graph
 ```mermaid
@@ -340,32 +343,35 @@ graph LR
     PROC --> FAB[PCB Fab]
     FAB --> ASM[SMT Assembly]
     ASM --> PWR[Power Bring-up]
-    PWR --> RF[RF Activation]
+    PWR --> RF[RF Bring-up]
     RF --> CAL[Calibration]
     CAL --> VAL[System Validation]
-    
-    FW[Verify Firmware] --> INT[Digital Integration]
-    RTL[Verify FPGA] --> INT
-    INT --> PWR
 ```
 
 ## B.3 Timeline Scenarios
 | Scenario | Calendar Time | Engineering Person-Days | Major Dependency | Confidence |
 | :--- | :---: | :---: | :--- | :--- |
-| Aggressive | 3 months | ~50 | PCB Fab Lead Times | Low |
-| Realistic | 5 months | ~90 | 1 PCB Respin, RF Matching | Medium |
-| Conservative | 9 months | ~150 | Supply chain (ADAR1000 delays) | High |
+| Aggressive | 3-4 months | ~50 | Fab Lead Times | Low |
+| Realistic | 5-6 months | ~90 | 1 PCB Respin | Medium |
+| Conservative | 9+ months | ~150 | Component Supply | High |
 
 ## B.4 Critical Path
-The actual critical path is completely gated by **Phase 0 (BOM/CAD Extraction)**. The timeline physically cannot begin until the passive components and mechanical dimensions are parsed. After extraction, PCB fabrication lead times (4-6 weeks for 10-layer Rogers) dominate the schedule.
+The critical path is exactly: **BOM extraction → procurement → PCB fabrication → assembly → power bring-up → digital integration → RF activation**. 
+
+## B.5 Resource Bottlenecks
+* **12GHz VNA Access:** *Severe bottleneck.* Without it, RF calibration halts. Mitigation: Pre-book rental equipment.
+* **RF PCBA Vendors:** *Medium bottleneck.* Finding a vendor capable of 10-layer mixed-dielectric impedance control in India. Mitigation: Use established global fabs if local sourcing fails.
+* **ADTR1107 (T/R Front-End) Availability:** *Severe bottleneck.* Restricted ITAR/export parts can cause 6-month delays.
 
 ---
 
 # PART X — REPLICATION TEAM
 
 # Appendix C — Minimum Team
-* **Minimum viable team (1-2 members):** A highly experienced cross-functional Systems/Hardware Engineer, supplemented by a part-time RF specialist for VNA calibration.
-* **Recommended team (3 members):** 1 Hardware Engineer, 1 Firmware/FPGA Engineer, 1 RF Engineer. (Approx. 12 person-months of combined effort).
+
+* **Theoretical Minimum (1 Person):** A highly capable cross-functional Systems/Hardware Engineer with outsourced RF calibration. (Requires extreme skill; high risk of burnout/delay).
+* **Practical Minimum (2 People):** 1 Hardware/Systems Engineer + 1 RF/Analog Engineer.
+* **Recommended (3-4 People):** Dedicated RF, Digital (FPGA/MCU), Hardware, and Systems responsibilities. (Reduces calendar time by allowing parallel digital and RF workstreams).
 
 ---
 
@@ -375,13 +381,13 @@ The actual critical path is completely gated by **Phase 0 (BOM/CAD Extraction)**
 
 | Estimate | Value/Range | Confidence | Main Uncertainty | What Would Improve It? |
 | :--- | :--- | :--- | :--- | :--- |
-| Parts cost | ₹2.5L – ₹5L | Medium | Exact RF passives | Executing `RE-001` |
-| PCB cost | ₹1.5L – ₹3L | Medium | Stackup requirements | PCB vendor quote |
-| Assembly cost | ₹1L – ₹2L | Medium | BGA X-ray yields | PCBA vendor quote |
-| Mechanical cost | ₹50k – ₹2L | Low | Unparsed `.dwg` | Executing `RE-002` |
-| Equipment | ₹3L – ₹5L | High | Rental market rates | Securing lab access |
-| Engineering | ₹7L – ₹15L | Medium | RF tuning difficulty | Clean digital boot |
-| Timeline | 3 – 9 Months | Low | Procurement delays | BOM extraction |
+| Parts cost | Assumed | Low | Missing BOM | `RE-001` extraction |
+| PCB cost | Estimated | Medium | Layer stackup | PCB fab quote |
+| Assembly cost | Estimated | Medium | BGA yield | PCBA quote |
+| Mechanical | Estimated | Low | Unparsed CAD | `RE-002` extraction |
+| Equipment | Estimated | High | Market rental rates | Lab reservation |
+| Engineering | Assumed | Medium | RF tuning difficulty | Clean digital boot |
+| Timeline | Estimated | Low | Fab/Procurement | BOM extraction |
 
 ---
 
@@ -389,34 +395,94 @@ The actual critical path is completely gated by **Phase 0 (BOM/CAD Extraction)**
 
 # Appendix E — Executive Replication Estimate
 
-| Metric | Minimum Functional | High Fidelity | Production Reproducible |
-| :--- | :---: | :---: | :---: |
-| Parts & Fab & Assy | ₹3,00,000 | ₹7,50,000 | ₹15,00,000 |
-| Equipment (Rent/Buy) | ₹2,50,000 | ₹4,00,000 | ₹8,00,000 |
-| Engineering | ₹5,00,000 | ₹7,25,000 | ₹18,00,000 |
-| Iteration Allowance | ₹0 | ₹4,00,000 | ₹15,00,000 |
-| Contingency | ₹1,50,000 | ₹4,00,000 | ₹10,00,000 |
-| **Total** | **₹12,00,000** | **₹26,75,000** | **₹66,00,000** |
-| Timeline | 3 Months | 5 Months | 9 Months |
+**Current engineering estimate: approximately ₹25–30 lakh**
+**Current planning estimate: approximately 5 calendar months**
 
-> "Based on currently available evidence, an approximate High-Fidelity reproduction of AERIS-10 is expected to require **₹25–30 Lakh** and **5 months** of calendar time, assuming 1 mandatory hardware redesign iteration and the successful rental of RF characterization equipment."
+*These figures represent a planning scenario for a High-Fidelity reproduction, assuming 1 mandatory hardware redesign iteration, standard lead times, and outsourced laboratory access.*
 
 ---
 
 # Appendix F — What Changes the Estimate
 
-1. **Exact BOM contents:** Resolving `UNK-001` drastically reduces timeline uncertainty.
+1. **Exact BOM contents:** Resolving `UNK-001` anchors the physical parts cost.
 2. **Missing proprietary FPGA IP:** Resolving `UNK-005` prevents massive engineering labor blowouts (rewriting DSP IP cores).
-3. **RF PCBA Fabrication:** If local Indian vendors cannot reliably press 10-layer RO4350B boards, outsourcing internationally will increase cost and timeline.
-4. **Exact GaN PA MPN:** A global shortage of QPA2962 could push the timeline from 5 months to 12+ months.
+3. **RF PCBA Fabrication:** Outsourcing internationally (if local fabs fail on RF tolerances) will increase cost and timeline.
+4. **Exact GaN PA MPN:** A global shortage of specific RF ICs could push the timeline drastically.
 
 ---
 
 # Appendix G — Immediate Actions That Reduce Uncertainty
 
-The following prioritized actions require zero hardware expenditure and will drastically collapse the uncertainty in the cost/timeline model:
+The following prioritized actions will most improve the estimate:
+1. **RE-001 (Parse `BOM_Main_Board.xlsx`):** Highest priority. Unlocks physical component sourcing.
+2. **RE-002 (Parse Mechanical `.dwg`):** Unlocks CNC machining requirements.
+3. **RE-005 (Verify Vivado Synthesis):** Proves the digital stack is reproducible without licensing delays.
 
-1. **RE-001 (Parse `BOM_Main_Board.xlsx`):** Absolute highest priority. Unlocks component sourcing quotes.
-2. **RE-002 (Parse Mechanical `.dwg`):** Unlocks CNC machining quotes.
-3. **RE-005 (Verify Vivado Synthesis):** Unlocks digital confidence and removes the risk of missing DSP IP.
-4. **RE-003 (Verify Power Inputs):** Resolves `UNK-010`, ensuring the bench supplies can be budgeted correctly.
+---
+
+# Appendix H — Radar Performance and Range Model
+
+> **Theoretical engineering estimate — not measured performance.**
+
+To evaluate the advertised range claims (3 km and 20 km), a parameterized radar equation model is required:
+
+$$
+R_{\max} = \left[ rac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3 kT_0BF L SNR_{\min}} 
+ight]^{1/4}
+$$
+
+| Parameter | Symbol | Nominal Assumed | Unit | Status | Evidence/Assumption |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Frequency | $f$ | 10.5 | GHz | Confirmed | Synthesizer Target |
+| Wavelength | $\lambda$ | 0.0285 | m | Calculated | |
+| TX power | $P_t$ | 10 | W | Assumption | Based on ADTR1107 (T/R Front-End) max |
+| Antenna gain | $G_t$, $G_r$ | UNK | dBi | Unknown | Needs CAD/BOM |
+| Target RCS | $\sigma$ | 1.0 | m² | Assumption | Standard drone |
+| Noise figure | NF | UNK | dB | Unknown | Needs Rx BOM |
+| Bandwidth | $B$ | UNK | Hz | Unknown | Needs RTL parameters |
+
+Without antenna gain ($G$) and receiver noise figure (NF), calculating actual range is impossible.
+*Sensitivity Note:* The 20 km range claim for the Extended variant is physically plausible for a 10W X-Band transmitter **if and only if** the waveguide antenna array provides extreme directional gain ($>30$ dBi) and the DSP integration gain is highly optimized.
+
+---
+
+# Appendix I — Subsystem Replication Difficulty
+
+| Subsystem | Documentation Difficulty | Fabrication Difficulty | Bring-Up Difficulty | Calibration Difficulty | Overall Risk |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| MCU | Low | Low | Low | Low | Low |
+| FPGA | Medium | Low | Medium | Low | Medium |
+| Main Board | Medium | Medium | Medium | Low | Medium |
+| Power Board | Low | Medium | High | Low | Medium (Due to PA Bias) |
+| Frequency Synth | High | High | High | Medium | High |
+| PA / Antenna | Very High | Very High | Very High | Very High | **Very High** |
+| Host Software | Low | Low | Low | Low | Low |
+
+*(Justification for Very High PA/Antenna risk: High-power 10GHz RF design requires perfect impedance matching, exotic dielectrics, expensive calibration equipment, and carries the physical risk of transistor destruction if biased incorrectly).*
+
+---
+
+# Appendix J — Cost Sensitivity Drivers
+
+| Driver | Current Uncertainty | Potential Cost Impact | Potential Timeline Impact | Resolution Task |
+| :--- | :--- | :--- | :--- | :--- |
+| Exact BOM | High | ₹2L – ₹5L | +4 weeks | `RE-001` |
+| RF Fabrication | Medium | ₹1L – ₹3L | +4 weeks | Vendor Quote |
+| Laboratory Access | High | ₹1L – ₹3L | +8 weeks | Pre-book VNA |
+| Iterations | Medium | ₹4L – ₹15L | +12 weeks | Strict HW Review |
+
+---
+
+## Current Estimate Confidence
+
+| Dimension | Current Confidence | Justification |
+| :--- | :--- | :--- |
+| System Architecture | High | Clear split between MCU and FPGA validated in firmware. |
+| Digital Architecture | High | DSP pipeline mapped in `04a_DSP_Pipeline.md`. |
+| RF Architecture | Medium | RX downconversion topology is unverified due to missing BOM. |
+| Hardware BOM | **Low** | Passive components locked inside unparsed binary Excel file. |
+| Mechanical Design | **Low** | Waveguide and enclosure locked inside unparsed DWG files. |
+| Performance | **Unknown** | No measured data exists in the repository. |
+| Parts Cost | Medium | Dominant ICs are known, but RF passives are unknown. |
+| Engineering Cost | Medium | Labor estimates depend heavily on the number of hardware respins. |
+| Timeline | Low | Cannot begin fabrication until Phase 0 binary extraction completes. |

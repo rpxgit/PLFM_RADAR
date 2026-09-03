@@ -28,13 +28,13 @@ According to the firmware source (`main.cpp:1448`), the AD9523 is configured to 
 | **0** | 300 MHz | LVDS | ADF4382 TX Synthesizer Reference | Master | `main.cpp` |
 | **1** | 300 MHz | LVDS | ADF4382 RX Synthesizer Reference | Aligned with CH 0 | `main.cpp` |
 | **4** | 400 MHz | LVDS | AD9484 ADC Clock | Master | `main.cpp` |
-| **5** | 400 MHz | LVDS | FPGA ADC Interface | Aligned with CH 4 | `main.cpp` |
+| **5** | 400 MHz | LVDS | FPGA ADC DCO Clock (`adc_dco_p/n`) | Aligned with CH 4 | `main.cpp`, `.xdc` |
 | **6** | 100 MHz | LVCMOS | FPGA System / DSP Clock | - | `main.cpp` |
 | **7** | 20 MHz | LVCMOS | FPGA Test Clock | - | `main.cpp` |
 | **8** | 60 MHz | LVDS | ADF4382 TX Sync | Master | `main.cpp` |
 | **9** | 60 MHz | LVDS | ADF4382 RX Sync | Aligned with CH 8 | `main.cpp` |
-| **10** | 120 MHz | LVCMOS | FPGA DAC Interface | Master | `main.cpp` |
-| **11** | 120 MHz | LVCMOS | Unused/Aux | Aligned with CH 10 | `main.cpp` |
+| **10** | 120 MHz | LVCMOS | AD9708 DAC Clock | Master | `main.cpp`, `xc7a50t_ftg256.xdc` |
+| **11** | 120 MHz | LVCMOS | FPGA DAC Interface Clock (`clk_120m_dac`) | Aligned with CH 10 | `main.cpp`, `xc7a50t_ftg256.xdc` |
 
 ---
 

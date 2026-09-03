@@ -16,14 +16,16 @@ canonical: true
 ## 1. Overview
 
 The ADAR1000 active antenna beamforming chips are responsible for electronic steering of the phased array. The STM32 controls an array of 4 ADAR1000 devices.
+In the RF Signal Chain, the ADAR1000s sit between the LTC5552 Mixers (via a common RF port) and the ADTR1107 T/R modules (via 4 individual RF ports per chip). They provide both phase and gain weighting for beamforming and perform critical bias sequencing for the ADTR1107 front-end modules.
 
 ---
 
 ## 2. Initialization and Architecture
 
 *   **Manager Class:** The firmware abstracts the entire array behind the C++ `ADAR1000Manager` class (`ADAR1000_Manager.cpp`).
-*   **SPI Bus:** The devices are programmed via SPI.
+*   **SPI Bus:** The devices are programmed via SPI. The SPI bus runs through a level shifter from the STM32 (3.3V) to the ADAR1000s (1.8V).
 *   **Initialization Loop:** `main.cpp` initializes the array in a sequential loop, checking for basic communication. If the loop fails, it triggers a fatal error and halts (`main.cpp:372`).
+*   **Front-End Biasing:** The ADAR1000 controls the bias currents for the attached ADTR1107 modules. The `ADAR1000Manager` writes to registers like `REG_PA_CH1_BIAS_ON` and `REG_LNA_BIAS_ON` to sequence the LNA and PA sections safely.
 
 ---
 

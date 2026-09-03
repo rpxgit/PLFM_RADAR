@@ -70,3 +70,10 @@ canonical: true
 
 - [[03_Hardware]]
 - [[05a_Power_Sequencing]]
+
+
+### Reconstructed Hardware Topology (EVID-PWR1)
+The Power Board utilizes a distributed Point-of-Load (PoL) architecture driven by a 12V input:
+*   **Buck Converters (Qty 21):** `TPS562208` (4.5V-17V input, 2A output). Forms the primary step-down network for all 3.3V, 5V, 1.8V, and 1.0V rails.
+*   **LDO Regulators (Qty 6):** `ADM7151` (800mA Ultralow Noise). Used exclusively for critical RF/Clock rails (AD9523, VCO).
+*   **Negative Inverters (Qty 5):** `LM2662MX` Switched Capacitor Voltage Converters. Resolves the missing negative bias capability.

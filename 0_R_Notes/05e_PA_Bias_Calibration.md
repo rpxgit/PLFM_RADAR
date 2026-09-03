@@ -18,6 +18,7 @@ canonical: true
 Because the radar utilizes GaN Power Amplifiers (PAs), the bias voltage ($V_g$) must be carefully sequenced and calibrated to hit a specific quiescent current ($I_{dq}$) before RF drive is applied. This prevents catastrophic thermal runaway in the GaN devices.
 
 The STM32 implements a closed-loop bias controller using I2C DACs (for setting voltage) and ADCs (for reading current).
+Additionally, the ADAR1000 beamformers have direct control over the biasing of the ADTR1107 T/R modules, managing their internal LNA and PA stages. The firmware writes to specific ADAR1000 SPI registers (e.g., `REG_PA_CH1_BIAS_ON`, `REG_LNA_BIAS_ON`) to enable/disable the ADTR1107 modules safely during Tx/Rx switching.
 
 ---
 

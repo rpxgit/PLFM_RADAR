@@ -16,7 +16,8 @@
 - **Digital Protocols:** Complete (SPI/I2C/USB/GPIO mapped).
 - **FPGA RTL:** Complete (Synthesis verification pending).
 - **MCU Firmware:** Complete (Wait on exact MCU MPN).
-- **RF/Hardware:** Blocked (Missing component values and dimensions).
+- **RF Signal Chain:** Complete (Component sequence and models mapped, pending missing passive values).
+- **Hardware:** Blocked (Missing component values and dimensions).
 
 ## Critical Blockers & Unknowns
 1. **UNK-001 / RE-001:** `BOM_Main_Board.xlsx` extraction required for passives.

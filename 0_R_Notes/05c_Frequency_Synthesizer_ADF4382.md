@@ -37,9 +37,10 @@ From the AD9523 configuration:
 ## 4. Initialization & Runtime Behavior
 
 1.  **PLL Initialization:** The STM32 initializes the ADF4382 devices over SPI. It must wait for the AD9523 clocks to become stable before programming the PLL registers.
-2.  **Runtime Modulation:** The actual FMCW chirp generation is typically handled autonomously by the ADF4382's internal ramp generator, triggered by an external hardware pulse. The firmware's job is to load the ramp profiles (start frequency, slope, duration) into the registers during the idle state.
+2.  **Runtime Modulation (Corrected Hypothesis):** Initially, it was hypothesized that the ADF4382's internal ramp generator generated the FMCW chirp. **This is incorrect.** Evidence in `radar_transmitter.v` and `plfm_chirp_controller.v` confirms that the chirp is generated digitally in the FPGA (using PLFM) and converted to an analog IF via the AD9708 DAC. 
+3. **True Role:** The ADF4382 acts exclusively as a fixed-frequency Local Oscillator (CW LO) for the LTC5552 up-mixers and down-mixers, stepping up the modulated IF chirp to the final X-Band frequency.
 
-*Note: The exact chirp parameters (bandwidth, duration) are likely passed from the host PC over USB and parsed by the firmware to update the ADF4382 registers.*
+*Note: The exact center frequency and fractional-N parameters are passed from the host PC over USB, parsed by the MCU firmware, and written to the ADF4382 registers to set the operating band.*
 
 
 ## Related Notes
