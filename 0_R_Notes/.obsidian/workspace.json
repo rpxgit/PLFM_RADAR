@@ -8,13 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e5b26fb36d16f1d7",
+            "id": "9ec12b7b991ad67b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "18a_AERIS-10_Internal_Product_Memo.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "18a_AERIS-10_Internal_Product_Memo"
             }
           }
         ]
@@ -95,6 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "18a_AERIS-10_Internal_Product_Memo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "18a_AERIS-10_Internal_Product_Memo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "18a_AERIS-10_Internal_Product_Memo.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -181,8 +188,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "e5b26fb36d16f1d7",
+  "active": "9ec12b7b991ad67b",
   "lastOpenFiles": [
+    "18a_AERIS-10_Internal_Product_Memo.md",
     "13_RF_Signal_Chain.md",
     "12_Power_Architecture.md",
     "18_AERIS-10_Product_White_Paper.md",
@@ -208,7 +216,6 @@
     "05b_Clock_Generator_AD9523.md",
     "05a_Power_Sequencing.md",
     "05_Firmware_MCU.md",
-    "04_Firmware_FPGA.md",
-    "04a_DSP_Pipeline.md"
+    "04_Firmware_FPGA.md"
   ]
 }

@@ -160,19 +160,6 @@ This index guarantees that no engineering assumption in the AERIS-10 project is 
 - **Dimensions:** 9.545 mm x 7.401 mm on 0.102 mm RO4350B substrate. Fabricator must hold ±0.025 mm tolerance.
 
 
-
-### EVID-BOM1 — Main Board Excel Extraction
-- **Source:** `Hardware/BOM/BOM_Main_Board.xlsx` (Parsed via Zip/XML Extraction)
-- **Finding:** Contains 104 exact MPNs for the Main Board.
-- **Key Discovers:** Proves the RF front-end utilizes 16x ADTR1107 T/R chips rather than QPA2962. Identifies LTC5552 mixers and AD9484 ADC. Confirms 500+ RF matching passives.
-
-
-### EVID-CAD1 — Patch Antenna FDTD Report
-- **Source:** `docs/AERIS_Antenna_Report.pdf`
-- **Finding:** Provides the exact FDTD-tuned mechanical geometry for the 10.5 GHz patch antenna element.
-- **Dimensions:** 9.545 mm x 7.401 mm on 0.102 mm RO4350B substrate. Fabricator must hold ±0.025 mm tolerance.
-
-
 ### EVID-PWR1 — Power Management Matrix
 - **Source:** `3_Power Management/Power Management V6.xlsx`
 - **Finding:** Details the entire power tree, current budget, and exact gate-drain bias sequencing for both the ADTR1107 and QPA2962 RF devices.
