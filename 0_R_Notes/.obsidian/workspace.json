@@ -183,6 +183,11 @@
   },
   "active": "18348d6e67f97977",
   "lastOpenFiles": [
+    "07_Communication_Protocols.md",
+    "07a_USB_Packet_Protocol.md",
+    "07d_STM32_FPGA_GPIO_Interface.md",
+    "07c_I2C_Bus_Map.md",
+    "07b_SPI_Bus_Map.md",
     "06_Software_GUI.md",
     "05e_PA_Bias_Calibration.md",
     "05d_Beamformer_ADAR1000.md",
@@ -203,7 +208,6 @@
     "03a_Main_Board.md",
     "02_System_Architecture.md",
     "01_Repository_Map.md",
-    "00_Executive_Summary.md",
-    "01_Component_Inventory_and_Sourcing.md"
+    "00_Executive_Summary.md"
   ]
 }
