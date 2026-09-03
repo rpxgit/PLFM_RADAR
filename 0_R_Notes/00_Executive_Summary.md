@@ -17,7 +17,7 @@ canonical: true
 
 ---
 
-## Knowledge Base Navigation
+### Knowledge Base Navigation
 
 ```mermaid
 graph TD
@@ -72,26 +72,36 @@ graph TD
 * **Power:** [[12_Power_Architecture]]
 * **RF:** [[13_RF_Signal_Chain]]
 
-## Current State
+### Current Phase
+Phase 0 (Evidence Closure) — Digital reconstruction is heavily documented, but physical reproduction is blocked.
+
+### Current State
 The project has successfully completed the digital architecture and protocol reverse-engineering phase. Hardware reproduction is currently blocked by missing binary extractions (BOM passives and CAD files). Software/FPGA/MCU components can be rebuilt, but physical replication requires resolving external dependencies. 
 
-## Highest-Priority Unknowns
-1. **UNK-001:** `BOM_Main_Board.xlsx` extraction (P0).
-2. **UNK-002:** Mechanical `.dwg` extraction (P0).
-3. **UNK-010:** System input DC voltage constraints (P0).
+### What Is Known
+- The host GUI control loop completely bypasses the STM32 for high-speed data acquisition, communicating directly with the FPGA via FT2232H FIFO.
+- The MCU is relegated exclusively to out-of-band management (thermal, bias, slow telemetry).
+- Negative biasing (-5V via LM2662) is required for the GaN PAs.
+- The system heavily uses the Analog Devices no-OS framework and a 50T/200T FPGA target split.
 
-## Current Critical Path
+### What Is Unknown
+1. **UNK-001:** `BOM_Main_Board.xlsx` component values.
+2. **UNK-002:** Mechanical `.dwg` dimensions and tolerances.
+3. **UNK-010:** Exact system input DC voltage constraints.
+4. **UNK-003:** Exact STM32F746 package suffix.
+5. **UNK-005:** FPGA bitstream verification against proprietary IP requirements.
+
+### Current Blockers
+- Inability to parse `BOM_Main_Board.xlsx` to procure passives.
+- Inability to parse `.dwg` files to machine the enclosure and waveguide.
+
+### Critical Path
 1. Extract and parse binary artifacts (BOM and CAD).
 2. Fabricate bare PCBs and machine mechanical parts.
 3. Perform staged power & clock hardware bring-up.
 4. Flash firmware and validate digital boundaries.
 
-## Recently Established Facts
-- The host GUI control loop completely bypasses the STM32 for high-speed data acquisition, communicating directly with the FPGA via FT2232H FIFO.
-- The MCU is relegated exclusively to out-of-band management (thermal, bias, slow telemetry).
-- The README positive-rail-only claim is false; negative biasing is required for the GaN PAs as evidenced by the LM2662 presence.
-
-## Planned Next Investigations
+### Next Actions
 - **RE-001:** Parse `BOM_Main_Board.xlsx` locally.
 - **RE-002:** Parse `*.dwg` files locally.
 - **RE-003:** Review `PowerBoard.sch` to resolve input power specs.

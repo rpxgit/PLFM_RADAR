@@ -1,0 +1,662 @@
+{
+  "nodes": [
+    {
+      "id": "27716008-edaf-44e5-973a-d3bbbd33c62c",
+      "type": "group",
+      "x": -1400,
+      "y": -800,
+      "width": 800,
+      "height": 600,
+      "label": "POWER & CLOCK SUBSYSTEM",
+      "color": "3"
+    },
+    {
+      "id": "a7ef5cf8-2ceb-4410-85f7-707c43216424",
+      "type": "group",
+      "x": -500,
+      "y": -800,
+      "width": 1000,
+      "height": 800,
+      "label": "MAIN BOARD / DIGITAL CORE",
+      "color": "1"
+    },
+    {
+      "id": "45a3799d-8003-494c-b4e0-b37beafcdba4",
+      "type": "group",
+      "x": 600,
+      "y": -800,
+      "width": 700,
+      "height": 800,
+      "label": "HOST SOFTWARE & GUI",
+      "color": "6"
+    },
+    {
+      "id": "123c3cf4-6677-43bb-85d5-8a79bf5abcf3",
+      "type": "group",
+      "x": -1400,
+      "y": 100,
+      "width": 2700,
+      "height": 800,
+      "label": "RF SIGNAL CHAIN (TX / RX)",
+      "color": "2"
+    },
+    {
+      "id": "f405204e-2a48-45cc-8125-2341cde5beee",
+      "type": "group",
+      "x": -1400,
+      "y": 1000,
+      "width": 1400,
+      "height": 400,
+      "label": "CURRENT UNKNOWNS & BLOCKERS",
+      "color": "5"
+    },
+    {
+      "id": "7734d3b4-6244-4611-9b36-cc861c3d2349",
+      "type": "group",
+      "x": 100,
+      "y": 1000,
+      "width": 1200,
+      "height": 400,
+      "label": "CANONICAL EVIDENCE"
+    },
+    {
+      "id": "PWR_IN",
+      "type": "text",
+      "x": -1300,
+      "y": -700,
+      "width": 250,
+      "height": 100,
+      "text": "**External DC Input**\n[UNK-010] Voltage TBD",
+      "color": "3"
+    },
+    {
+      "id": "PWR_BRD",
+      "type": "text",
+      "x": -1300,
+      "y": -500,
+      "width": 250,
+      "height": 150,
+      "text": "**Power Board**\n[[03b_Power_Board]]\nGenerates 1.0V, 1.8V, 3.3V, 5V",
+      "color": "3"
+    },
+    {
+      "id": "PWR_LM2662",
+      "type": "text",
+      "x": -950,
+      "y": -500,
+      "width": 250,
+      "height": 100,
+      "text": "**LM2662 Inverter**\nGenerates -5V PA Bias",
+      "color": "3"
+    },
+    {
+      "id": "CLK_REF",
+      "type": "text",
+      "x": -1300,
+      "y": -300,
+      "width": 250,
+      "height": 100,
+      "text": "**Reference Clock**",
+      "color": "3"
+    },
+    {
+      "id": "CLK_AD9523",
+      "type": "text",
+      "x": -950,
+      "y": -300,
+      "width": 250,
+      "height": 150,
+      "text": "**AD9523-1 (Clock Gen)**\n[[05b_Clock_Generator_AD9523]]\n[[03c_Frequency_Synthesizer_Board]]",
+      "color": "3"
+    },
+    {
+      "id": "DIG_MCU",
+      "type": "text",
+      "x": -400,
+      "y": -700,
+      "width": 300,
+      "height": 200,
+      "text": "**STM32F746 (MCU)**\n[[05_Firmware_MCU]]\n*Control Plane*\nManages out-of-band config, clocks, bias, and thermal safety.",
+      "color": "4"
+    },
+    {
+      "id": "DIG_FPGA",
+      "type": "text",
+      "x": 100,
+      "y": -700,
+      "width": 300,
+      "height": 200,
+      "text": "**XC7A50T (FPGA)**\n[[04_Firmware_FPGA]]\n*Data Plane*\nExecutes DSP pipeline, radar timing, and fast ADC/DAC capture.",
+      "color": "1"
+    },
+    {
+      "id": "DIG_FT",
+      "type": "text",
+      "x": -150,
+      "y": -400,
+      "width": 300,
+      "height": 100,
+      "text": "**FT2232H (USB Bridge)**\n[[04b_USB_Interface]]\nBridges FPGA high-speed FIFO to USB.",
+      "color": "1"
+    },
+    {
+      "id": "HOST_USB",
+      "type": "text",
+      "x": 700,
+      "y": -400,
+      "width": 200,
+      "height": 100,
+      "text": "**USB 2.0 / 3.0**",
+      "color": "6"
+    },
+    {
+      "id": "HOST_PC",
+      "type": "text",
+      "x": 1000,
+      "y": -700,
+      "width": 250,
+      "height": 200,
+      "text": "**Host PC (Python)**\n[[06_Software_GUI]]\n[[07_Communication_Protocols]]\nradar_protocol.py parses FT2232H datastream.",
+      "color": "6"
+    },
+    {
+      "id": "HOST_GUI",
+      "type": "text",
+      "x": 1000,
+      "y": -400,
+      "width": 250,
+      "height": 150,
+      "text": "**PyQt6 GUI**\nUser Visualization (FFT / Target Range), Configuration parameters.",
+      "color": "6"
+    },
+    {
+      "id": "RF_ADF",
+      "type": "text",
+      "x": -1300,
+      "y": 250,
+      "width": 250,
+      "height": 150,
+      "text": "**ADF4382 (Synthesizer)**\n[[03c_Frequency_Synthesizer_Board]]\nGenerates 10.5 GHz LFM Chirp LO.",
+      "color": "2"
+    },
+    {
+      "id": "RF_ADAR",
+      "type": "text",
+      "x": -900,
+      "y": 250,
+      "width": 250,
+      "height": 150,
+      "text": "**ADAR1000 (Beamformer)**\n[[05d_Beamformer_ADAR1000]]\nPhase/Gain control.",
+      "color": "2"
+    },
+    {
+      "id": "RF_PA",
+      "type": "text",
+      "x": -500,
+      "y": 250,
+      "width": 250,
+      "height": 150,
+      "text": "**QPA2962 (GaN PA)**\n[[03d_Power_Amplifier_Board]]\n10W RF Amplification.",
+      "color": "2"
+    },
+    {
+      "id": "RF_ANT_TX",
+      "type": "text",
+      "x": -100,
+      "y": 250,
+      "width": 200,
+      "height": 150,
+      "text": "**TX Antenna**\n[[03e_Antenna_Array]]\nNexus (Patch) or Ext (Waveguide).",
+      "color": "2"
+    },
+    {
+      "id": "RF_TGT",
+      "type": "text",
+      "x": 300,
+      "y": 250,
+      "width": 200,
+      "height": 400,
+      "text": "**TARGET**\n(Propagation)"
+    },
+    {
+      "id": "RF_ANT_RX",
+      "type": "text",
+      "x": 700,
+      "y": 250,
+      "width": 200,
+      "height": 150,
+      "text": "**RX Antenna**\nReceives echo.",
+      "color": "2"
+    },
+    {
+      "id": "RF_RX_MIX",
+      "type": "text",
+      "x": 700,
+      "y": 450,
+      "width": 200,
+      "height": 150,
+      "text": "**Downconversion**\nMixes RF with LO.",
+      "color": "2"
+    },
+    {
+      "id": "RF_ADC",
+      "type": "text",
+      "x": 700,
+      "y": 650,
+      "width": 200,
+      "height": 150,
+      "text": "**ADC**\nDigitizes baseband.",
+      "color": "2"
+    },
+    {
+      "id": "RF_DAC",
+      "type": "text",
+      "x": -500,
+      "y": 50,
+      "width": 250,
+      "height": 100,
+      "text": "**DAC5578**\n[[05e_PA_Bias_Calibration]]\nGenerates analog bias Vg",
+      "color": "4"
+    },
+    {
+      "id": "DIG_DSP",
+      "type": "text",
+      "x": 100,
+      "y": -400,
+      "width": 300,
+      "height": 200,
+      "text": "**FPGA DSP Pipeline**\n[[04a_DSP_Pipeline]]\nADC Capture -> Filtering -> Windowing -> FFT -> CFAR Target Detection.",
+      "color": "1"
+    },
+    {
+      "id": "UNK_001",
+      "type": "text",
+      "x": -1300,
+      "y": 1100,
+      "width": 250,
+      "height": 100,
+      "text": "**UNK-001**\nBOM_Main_Board.xlsx is unparsable binary. Blocks all PCBA.",
+      "color": "5"
+    },
+    {
+      "id": "UNK_002",
+      "type": "text",
+      "x": -1000,
+      "y": 1100,
+      "width": 250,
+      "height": 100,
+      "text": "**UNK-002**\nMechanical CAD missing. Blocks waveguide milling.",
+      "color": "5"
+    },
+    {
+      "id": "UNK_010",
+      "type": "text",
+      "x": -700,
+      "y": 1100,
+      "width": 250,
+      "height": 100,
+      "text": "**UNK-010**\nDC Input Voltage undefined.",
+      "color": "5"
+    },
+    {
+      "id": "UNK_005",
+      "type": "text",
+      "x": -400,
+      "y": 1100,
+      "width": 250,
+      "height": 100,
+      "text": "**UNK-003 & 005**\nExact STM32 Package and FPGA Boot missing.",
+      "color": "5"
+    },
+    {
+      "id": "78eb8dd9-cac9-4133-967a-a9e0464ae47c",
+      "type": "file",
+      "x": 200,
+      "y": 1100,
+      "width": 200,
+      "height": 100,
+      "file": "00_Executive_Summary.md"
+    },
+    {
+      "id": "22d1e1a7-8d34-4464-8e9f-bb117723c8d8",
+      "type": "file",
+      "x": 450,
+      "y": 1100,
+      "width": 200,
+      "height": 100,
+      "file": "10_Reverse_Engineering_Plan.md"
+    },
+    {
+      "id": "21b8f45e-f44d-48de-bd10-07c1fbc9d57c",
+      "type": "file",
+      "x": 700,
+      "y": 1100,
+      "width": 200,
+      "height": 100,
+      "file": "15_Reproduction_Readiness_and_Gate_Review.md"
+    },
+    {
+      "id": "58c049c6-22da-4812-b1f8-00eccaacf816",
+      "type": "file",
+      "x": 950,
+      "y": 1100,
+      "width": 200,
+      "height": 100,
+      "file": "PROJECT_STATUS.md"
+    }
+  ],
+  "edges": [
+    {
+      "id": "7eac6fea-25f4-4849-9c28-adf9720eb4f9",
+      "fromNode": "PWR_IN",
+      "fromSide": "bottom",
+      "toNode": "PWR_BRD",
+      "toSide": "top",
+      "label": "Supplies"
+    },
+    {
+      "id": "b74d1ab2-3612-4eb4-9d9b-a780351e067b",
+      "fromNode": "PWR_BRD",
+      "fromSide": "right",
+      "toNode": "PWR_LM2662",
+      "toSide": "left",
+      "label": "+5V to Inverter"
+    },
+    {
+      "id": "03d2b6c6-a879-49f0-86fb-e63db4f3f714",
+      "fromNode": "CLK_REF",
+      "fromSide": "right",
+      "toNode": "CLK_AD9523",
+      "toSide": "left",
+      "label": "Reference In"
+    },
+    {
+      "id": "1e2592c0-017d-4d02-9516-8c039e270714",
+      "fromNode": "DIG_MCU",
+      "fromSide": "right",
+      "toNode": "DIG_FPGA",
+      "toSide": "left",
+      "label": "GPIO / Interlocks",
+      "color": "4"
+    },
+    {
+      "id": "6c04ff92-2ed2-4b72-82b6-edc842715708",
+      "fromNode": "DIG_FPGA",
+      "fromSide": "bottom",
+      "toNode": "DIG_FT",
+      "toSide": "top",
+      "label": "Parallel FIFO",
+      "color": "1"
+    },
+    {
+      "id": "95beba29-95d8-4f47-8c82-74828441e8dd",
+      "fromNode": "PWR_BRD",
+      "fromSide": "right",
+      "toNode": "DIG_MCU",
+      "toSide": "left",
+      "label": "3.3V",
+      "color": "3"
+    },
+    {
+      "id": "b2d17cf3-cbb9-4ba7-87b1-e63d4a62a98b",
+      "fromNode": "PWR_BRD",
+      "fromSide": "right",
+      "toNode": "DIG_FPGA",
+      "toSide": "bottom",
+      "label": "1.0V/1.8V/3.3V",
+      "color": "3"
+    },
+    {
+      "id": "7ccff76f-95dd-4cd0-8a15-14dc3be15129",
+      "fromNode": "CLK_AD9523",
+      "fromSide": "right",
+      "toNode": "DIG_FPGA",
+      "toSide": "left",
+      "label": "Sys Clock",
+      "color": "3"
+    },
+    {
+      "id": "dbf5f62d-dbd6-4c4e-ab56-7f550b0601d7",
+      "fromNode": "CLK_AD9523",
+      "fromSide": "top",
+      "toNode": "DIG_MCU",
+      "toSide": "bottom",
+      "label": "MCU Clock",
+      "color": "3"
+    },
+    {
+      "id": "45bb3b01-e60e-423b-b4ee-04053b35e6f2",
+      "fromNode": "DIG_FT",
+      "fromSide": "right",
+      "toNode": "HOST_USB",
+      "toSide": "left",
+      "label": "USB Data",
+      "color": "1"
+    },
+    {
+      "id": "858228e5-a8cb-48e9-a22e-b1af2d8aec88",
+      "fromNode": "HOST_USB",
+      "fromSide": "right",
+      "toNode": "HOST_PC",
+      "toSide": "bottom",
+      "label": "pyftdi bindings",
+      "color": "6"
+    },
+    {
+      "id": "e5d3b7c0-3126-4628-ad90-069c91e31db7",
+      "fromNode": "HOST_PC",
+      "fromSide": "bottom",
+      "toNode": "HOST_GUI",
+      "toSide": "top",
+      "label": "Data loop",
+      "color": "6"
+    },
+    {
+      "id": "5fba23d5-e6ed-4d53-b4ca-9754d4e89b11",
+      "fromNode": "HOST_GUI",
+      "fromSide": "left",
+      "toNode": "HOST_USB",
+      "toSide": "top",
+      "label": "Control commands",
+      "color": "6"
+    },
+    {
+      "id": "392812e0-507d-455c-8ae8-30781f7b4e5e",
+      "fromNode": "RF_ADF",
+      "fromSide": "right",
+      "toNode": "RF_ADAR",
+      "toSide": "left",
+      "label": "RF CW/Chirp",
+      "color": "2"
+    },
+    {
+      "id": "41d077c4-22cf-4343-8e92-af9311308812",
+      "fromNode": "RF_ADAR",
+      "fromSide": "right",
+      "toNode": "RF_PA",
+      "toSide": "left",
+      "label": "RF to PA",
+      "color": "2"
+    },
+    {
+      "id": "0ad93cfd-9501-4a48-a4b3-8f3609f8dc47",
+      "fromNode": "RF_PA",
+      "fromSide": "right",
+      "toNode": "RF_ANT_TX",
+      "toSide": "left",
+      "label": "High Power RF",
+      "color": "2"
+    },
+    {
+      "id": "6fa427b4-4df1-4083-ae25-3142dbc3340a",
+      "fromNode": "RF_ANT_TX",
+      "fromSide": "right",
+      "toNode": "RF_TGT",
+      "toSide": "left",
+      "label": "Radiated Wave",
+      "color": "2"
+    },
+    {
+      "id": "d250c0a1-a8d2-41a3-b33a-2ac2a80f7d54",
+      "fromNode": "RF_TGT",
+      "fromSide": "right",
+      "toNode": "RF_ANT_RX",
+      "toSide": "left",
+      "label": "Echo",
+      "color": "2"
+    },
+    {
+      "id": "ebb3a14b-3c3b-45ed-8b2e-976a28d8cabd",
+      "fromNode": "RF_ANT_RX",
+      "fromSide": "bottom",
+      "toNode": "RF_RX_MIX",
+      "toSide": "top",
+      "label": "RF In",
+      "color": "2"
+    },
+    {
+      "id": "e22f3e94-fbb0-4ded-a089-948712faa922",
+      "fromNode": "RF_ADF",
+      "fromSide": "bottom",
+      "toNode": "RF_RX_MIX",
+      "toSide": "left",
+      "label": "LO for Mixer",
+      "color": "2"
+    },
+    {
+      "id": "00973e57-54d5-4d81-9032-a9ed4591aac7",
+      "fromNode": "RF_RX_MIX",
+      "fromSide": "bottom",
+      "toNode": "RF_ADC",
+      "toSide": "top",
+      "label": "IF / Baseband",
+      "color": "2"
+    },
+    {
+      "id": "871b25f2-28e3-4140-917a-579352144bc2",
+      "fromNode": "RF_ADC",
+      "fromSide": "left",
+      "toNode": "DIG_FPGA",
+      "toSide": "right",
+      "label": "Digital Samples",
+      "color": "1"
+    },
+    {
+      "id": "ac219612-faab-417e-ad71-eca29493d398",
+      "fromNode": "DIG_MCU",
+      "fromSide": "bottom",
+      "toNode": "CLK_AD9523",
+      "toSide": "top",
+      "label": "SPI1 config",
+      "color": "4"
+    },
+    {
+      "id": "a5e74661-5826-4e9f-bc37-8b546dcacd8e",
+      "fromNode": "DIG_MCU",
+      "fromSide": "bottom",
+      "toNode": "RF_ADF",
+      "toSide": "top",
+      "label": "SPI2 config",
+      "color": "4"
+    },
+    {
+      "id": "dd6020ea-7f97-4739-8f74-6124ac3e638a",
+      "fromNode": "DIG_MCU",
+      "fromSide": "bottom",
+      "toNode": "RF_ADAR",
+      "toSide": "top",
+      "label": "SPI3 config",
+      "color": "4"
+    },
+    {
+      "id": "125afc51-8444-48c7-ad2e-d5b3a731ba0a",
+      "fromNode": "DIG_MCU",
+      "fromSide": "bottom",
+      "toNode": "RF_DAC",
+      "toSide": "top",
+      "label": "I2C config",
+      "color": "4"
+    },
+    {
+      "id": "e7e1b44a-0e28-4ed9-b66c-8546f24cdabe",
+      "fromNode": "PWR_LM2662",
+      "fromSide": "right",
+      "toNode": "RF_DAC",
+      "toSide": "left",
+      "label": "-5V Ref",
+      "color": "3"
+    },
+    {
+      "id": "acbc0c69-13db-4f2c-ac72-5d53371782c8",
+      "fromNode": "RF_DAC",
+      "fromSide": "bottom",
+      "toNode": "RF_PA",
+      "toSide": "top",
+      "label": "Vg (Negative Gate Bias)",
+      "color": "4"
+    },
+    {
+      "id": "eafbdd4d-7179-4836-9e19-96ac4edc9b85",
+      "fromNode": "DIG_FPGA",
+      "fromSide": "bottom",
+      "toNode": "DIG_DSP",
+      "toSide": "top",
+      "label": "Internal Logic",
+      "color": "1"
+    },
+    {
+      "id": "b1f35122-b9ab-46f9-9be3-e13457d2c5d3",
+      "fromNode": "RF_ADC",
+      "fromSide": "left",
+      "toNode": "DIG_DSP",
+      "toSide": "right",
+      "label": "Raw Data",
+      "color": "1"
+    },
+    {
+      "id": "5cef8f86-0f2e-4a15-a3b6-a166d2bfd2b0",
+      "fromNode": "DIG_DSP",
+      "fromSide": "left",
+      "toNode": "DIG_FT",
+      "toSide": "right",
+      "label": "Detection / FFT Data",
+      "color": "1"
+    },
+    {
+      "id": "9aab04ab-3617-47a8-a7a7-92ecda0b341a",
+      "fromNode": "UNK_001",
+      "fromSide": "top",
+      "toNode": "RF_PA",
+      "toSide": "bottom",
+      "label": "Blocks PCB",
+      "color": "5"
+    },
+    {
+      "id": "a3fa9eb4-99c4-4aba-9b7f-56d4ea2dc3d0",
+      "fromNode": "UNK_002",
+      "fromSide": "top",
+      "toNode": "RF_ANT_TX",
+      "toSide": "bottom",
+      "label": "Blocks CNC",
+      "color": "5"
+    },
+    {
+      "id": "260b8308-ef3b-4ad5-81a8-950ac9bfa5bd",
+      "fromNode": "UNK_010",
+      "fromSide": "top",
+      "toNode": "PWR_IN",
+      "toSide": "bottom",
+      "label": "Blocks Power-on",
+      "color": "5"
+    },
+    {
+      "id": "5eae3d0f-9bd0-4fa2-acb9-a4831a9f95c6",
+      "fromNode": "UNK_005",
+      "fromSide": "top",
+      "toNode": "DIG_MCU",
+      "toSide": "bottom",
+      "label": "Blocks Assembly",
+      "color": "5"
+    }
+  ]
+}

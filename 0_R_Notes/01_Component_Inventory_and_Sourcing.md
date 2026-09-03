@@ -1,10 +1,13 @@
 ---
 type: reverse-engineering-note
-status: active
-domain: system
+status: obsolete
+domain: hardware
 confidence: mixed
-canonical: true
+canonical: false
 ---
+
+> [!WARNING] Superseded Note
+> This note has been superseded by [[08_Component_Inventory]] and [[10_Reverse_Engineering_Plan]]. It is retained for provenance only.
 
 # Component Inventory & Preliminary Sourcing BOM
 

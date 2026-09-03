@@ -11,13 +11,35 @@
             "id": "18348d6e67f97977",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "canvas",
+              "state": {
+                "file": "AERIS-10_System_Function.canvas",
+                "viewState": {
+                  "x": -259.41474007703346,
+                  "y": 112.81794892619479,
+                  "zoom": -1.333333333333333
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "AERIS-10_System_Function"
+            }
+          },
+          {
+            "id": "e5b26fb36d16f1d7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "18_AERIS-10_Product_White_Paper.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "18_AERIS-10_Product_White_Paper"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -95,6 +117,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "18_AERIS-10_Product_White_Paper.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +136,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "18_AERIS-10_Product_White_Paper.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +179,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "18_AERIS-10_Product_White_Paper.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -181,8 +206,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "18348d6e67f97977",
+  "active": "e5b26fb36d16f1d7",
   "lastOpenFiles": [
+    "AERIS-10_System_Function.canvas",
+    "18_AERIS-10_Product_White_Paper.md",
+    "17_Validation_and_Acceptance_Matrix.md",
+    "16_Evidence_and_Provenance_Index.md",
+    "15_Reproduction_Readiness_and_Gate_Review.md",
+    "14_Reproduction_Schedule_and_Resource_Plan.md",
     "PROJECT_STATUS.md",
     "99_Documentation_Audit.md",
     "10_Reverse_Engineering_Plan.md",
@@ -202,12 +233,6 @@
     "05_Firmware_MCU.md",
     "04_Firmware_FPGA.md",
     "04a_DSP_Pipeline.md",
-    "04b_USB_Interface.md",
-    "04c_Clock_Domains.md",
-    "04d_FPGA_Constraints_and_Targets.md",
-    "03_Hardware.md",
-    "03e_Antenna_Array.md",
-    "03d_Power_Amplifier_Board.md",
-    "03c_Frequency_Synthesizer_Board.md"
+    "04b_USB_Interface.md"
   ]
 }
