@@ -11,14 +11,10 @@
             "id": "18348d6e67f97977",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "01_Component_Inventory_and_Sourcing.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "01_Component_Inventory_and_Sourcing"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -99,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "01_Component_Inventory_and_Sourcing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +113,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "01_Component_Inventory_and_Sourcing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +155,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "01_Component_Inventory_and_Sourcing.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,7 +183,27 @@
   },
   "active": "18348d6e67f97977",
   "lastOpenFiles": [
-    "01_Component_Inventory_and_Sourcing.md",
-    "00_Executive_Summary.md"
+    "06_Software_GUI.md",
+    "05e_PA_Bias_Calibration.md",
+    "05d_Beamformer_ADAR1000.md",
+    "05c_Frequency_Synthesizer_ADF4382.md",
+    "05b_Clock_Generator_AD9523.md",
+    "05a_Power_Sequencing.md",
+    "05_Firmware_MCU.md",
+    "04_Firmware_FPGA.md",
+    "04a_DSP_Pipeline.md",
+    "04b_USB_Interface.md",
+    "04c_Clock_Domains.md",
+    "04d_FPGA_Constraints_and_Targets.md",
+    "03_Hardware.md",
+    "03e_Antenna_Array.md",
+    "03d_Power_Amplifier_Board.md",
+    "03c_Frequency_Synthesizer_Board.md",
+    "03b_Power_Board.md",
+    "03a_Main_Board.md",
+    "02_System_Architecture.md",
+    "01_Repository_Map.md",
+    "00_Executive_Summary.md",
+    "01_Component_Inventory_and_Sourcing.md"
   ]
 }
